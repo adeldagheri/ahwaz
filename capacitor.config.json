@@ -1,0 +1,6 @@
+{
+  "appId": "com.ahwaz.compiled",
+  "appName": "Ahwaz, Compiled",
+  "webDir": "www",
+  "android": { "backgroundColor": "#1b1520" }
+}

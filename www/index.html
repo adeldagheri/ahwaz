@@ -1,0 +1,1852 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1b1520">
+<title>Ahwaz, Compiled · سفر خوزستان</title>
+<style>
+@font-face{font-family:Vazirmatn;font-weight:400;font-style:normal;font-display:swap;src:url(fonts/vazirmatn-arabic-400-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200D}
+@font-face{font-family:Vazirmatn;font-weight:400;font-style:normal;font-display:swap;src:url(fonts/vazirmatn-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215}
+@font-face{font-family:Vazirmatn;font-weight:600;font-style:normal;font-display:swap;src:url(fonts/vazirmatn-arabic-600-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200D}
+@font-face{font-family:Vazirmatn;font-weight:600;font-style:normal;font-display:swap;src:url(fonts/vazirmatn-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215}
+@font-face{font-family:Vazirmatn;font-weight:800;font-style:normal;font-display:swap;src:url(fonts/vazirmatn-arabic-800-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200D}
+@font-face{font-family:Vazirmatn;font-weight:800;font-style:normal;font-display:swap;src:url(fonts/vazirmatn-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215}
+@font-face{font-family:Silkscreen;font-weight:400;font-style:normal;font-display:swap;src:url(fonts/silkscreen-latin-400-normal.woff2) format('woff2')}
+:root{
+  --sand: oklch(93% 0.028 75);
+  --sand-2: oklch(87% 0.04 72);
+  --sand-3: oklch(79% 0.045 70);
+  --ink: oklch(24% 0.03 300);
+  --ink-2: oklch(44% 0.03 300);
+  --dusk: oklch(57% 0.17 22);
+  --gold: oklch(83% 0.14 78);
+  --frame: oklch(21% 0.03 300);
+  --frame-hi: oklch(30% 0.035 300);
+  --panel: oklch(26% 0.035 300);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--sand);color:var(--ink)}
+body{
+  min-height:100dvh;display:grid;grid-template-rows:auto 1fr auto;gap:20px;
+  padding:24px clamp(12px,4vw,48px) 20px;
+  font-family:Vazirmatn,system-ui,sans-serif;font-size:1rem;line-height:1.6;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:8px 24px;flex-wrap:wrap}
+h1{font-family:Silkscreen,monospace;font-weight:400;font-size:clamp(1.25rem,2.6vw,1.9rem);letter-spacing:.04em;direction:ltr;line-height:1.1}
+h1 span{color:var(--dusk)}
+.meta{font-size:.875rem;color:var(--ink-2);max-width:62ch}
+main{display:grid;place-items:center;align-content:center;gap:16px}
+.stage{
+  position:relative;width:min(100%, calc((100dvh - 210px) * 16 / 9), 1280px);aspect-ratio:16/9;
+  background:var(--frame);padding:6px;border-radius:6px;container-type:inline-size;
+  box-shadow:0 1px 0 var(--frame-hi) inset,0 24px 48px -28px oklch(22% 0.06 300 / .55);
+}
+canvas#game{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:2px;cursor:pointer}
+canvas:focus{outline:none}
+canvas#game:focus-visible{outline:3px solid var(--dusk);outline-offset:6px}
+.keys{display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:center;font-size:.875rem;color:var(--ink-2)}
+.keys span{white-space:nowrap}
+kbd{
+  font-family:Silkscreen,monospace;font-size:.75rem;line-height:1;background:var(--sand-2);color:var(--ink);
+  border:1px solid var(--sand-3);border-bottom-width:3px;border-radius:4px;padding:4px 8px;
+  direction:ltr;display:inline-block;margin-inline:2px;
+}
+.touch{display:none;width:min(100%,720px);justify-content:space-between;align-items:center;gap:12px;direction:ltr;user-select:none;-webkit-user-select:none;touch-action:none}
+.touch .pad{display:flex;gap:12px}
+.touch button{
+  font-family:Silkscreen,monospace;font-size:1rem;letter-spacing:.06em;color:var(--sand);
+  background:var(--frame);border:0;border-radius:10px;min-width:72px;height:64px;padding:0 20px;
+  box-shadow:0 4px 0 oklch(14% 0.03 300);transition:transform 120ms var(--ease),box-shadow 120ms var(--ease);
+  -webkit-tap-highlight-color:transparent;touch-action:none;
+}
+.touch button.jump{background:var(--dusk);box-shadow:0 4px 0 oklch(40% 0.14 22);min-width:120px}
+.touch button.on{transform:translateY(3px);box-shadow:0 1px 0 oklch(14% 0.03 300)}
+.touch button.jump.on{box-shadow:0 1px 0 oklch(40% 0.14 22)}
+footer{font-size:.75rem;color:var(--ink-2);text-align:center}
+
+/* ---------- overlay screens ---------- */
+.ov{
+  position:absolute;inset:6px;display:none;flex-direction:column;justify-content:center;gap:clamp(10px,2.2cqw,24px);
+  padding:clamp(14px,3.2cqw,40px) clamp(16px,4.5cqw,56px);background:oklch(18% 0.035 300 / .9);color:var(--sand);
+  overflow:auto;border-radius:2px;
+}
+.ov.on{display:flex;animation:ovIn .45s var(--ease)}
+@keyframes ovIn{from{opacity:0;transform:translateY(8px)}}
+.ov h2{font-weight:800;font-size:clamp(1.15rem,3.3cqw,2.3rem);line-height:1.25;text-wrap:balance}
+.kick{font-family:Silkscreen,monospace;direction:ltr;text-align:right;letter-spacing:.08em;font-size:clamp(.62rem,1.25cqw,.85rem);color:var(--gold)}
+.kick em{font-style:normal;color:var(--sand)}
+.row{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.b{
+  font-weight:800;background:var(--gold);color:var(--frame);border-radius:8px;padding:.5em 1.3em;min-height:44px;
+  box-shadow:0 3px 0 oklch(58% 0.12 68);transition:transform 120ms var(--ease),box-shadow 120ms var(--ease),background .2s;
+  font-size:clamp(.85rem,1.7cqw,1.05rem)
+}
+.b:hover{background:oklch(87% 0.13 82)}
+.b:active{transform:translateY(2px);box-shadow:0 1px 0 oklch(58% 0.12 68)}
+.b.alt{background:transparent;color:var(--sand);box-shadow:inset 0 0 0 2px oklch(52% 0.03 300)}
+.b.alt:hover{background:oklch(28% 0.035 300)}
+.lnk{color:oklch(78% 0.03 300);text-decoration:underline;text-underline-offset:4px;font-size:clamp(.78rem,1.4cqw,.92rem);padding:8px 4px;min-height:40px}
+.lnk:hover{color:var(--sand)}
+.ov :focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.pix{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
+
+.chars{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(6px,1.2cqw,14px)}
+.ch{background:var(--panel);border-radius:10px;padding:clamp(6px,1.2cqw,14px) 4px clamp(6px,1cqw,12px);display:flex;flex-direction:column;align-items:center;gap:2px;transition:background .2s,transform .15s var(--ease)}
+.ch:hover{background:oklch(30% 0.04 300)}
+.ch.sel{background:oklch(34% 0.06 300);box-shadow:inset 0 0 0 2px var(--gold)}
+.ch canvas{width:min(100%,10cqw);aspect-ratio:24/30;margin-bottom:4px}
+.ch b{font-size:clamp(.8rem,1.8cqw,1.1rem);line-height:1.3}
+.ch small{font-size:clamp(.62rem,1.25cqw,.82rem);color:oklch(76% 0.03 300);line-height:1.3;text-align:center}
+.perk{font-size:clamp(.8rem,1.6cqw,1rem);color:oklch(86% 0.02 300);max-width:70ch;min-height:3.2em}
+.perk b{color:var(--sand)}
+.tag{display:inline-block;margin-inline-start:6px;background:oklch(34% 0.07 70);color:var(--gold);border-radius:6px;padding:0 8px;font-weight:600}
+
+.who{display:flex;align-items:center;gap:12px}
+.who canvas{width:clamp(28px,4.5cqw,48px);aspect-ratio:24/30}
+.who b{display:block;font-size:clamp(.9rem,1.8cqw,1.1rem)}
+.who small{color:oklch(76% 0.03 300);font-size:clamp(.7rem,1.3cqw,.85rem)}
+.who .lnk{margin-inline-start:auto}
+.stops{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(6px,1.1cqw,12px);counter-reset:s}
+.stop{position:relative;width:100%;height:100%;text-align:right;background:var(--panel);border-radius:10px;padding:clamp(6px,1.2cqw,14px) clamp(8px,1.4cqw,16px);display:flex;flex-direction:column;gap:0;transition:background .2s}
+.stop:hover:not(:disabled){background:oklch(31% 0.045 300)}
+.stop .n{font-family:Silkscreen,monospace;color:var(--gold);font-size:clamp(.62rem,1.2cqw,.8rem);direction:ltr;text-align:right}
+.stop b{font-size:clamp(.78rem,1.65cqw,1.02rem);line-height:1.35}
+.stop small{color:oklch(74% 0.03 300);font-size:clamp(.62rem,1.2cqw,.8rem)}
+.stop .rk{position:absolute;left:clamp(6px,1.2cqw,14px);top:clamp(6px,1cqw,12px);font-family:Silkscreen,monospace;font-size:clamp(.8rem,1.9cqw,1.3rem);color:var(--gold)}
+.stop.cur{box-shadow:inset 0 0 0 2px var(--gold)}
+.stop.lock{opacity:.4;cursor:not-allowed}
+.shelf{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:clamp(1.1rem,2.6cqw,1.7rem);line-height:1}
+.shelf .lbl{font-size:clamp(.72rem,1.3cqw,.88rem);color:oklch(76% 0.03 300);margin-inline-end:6px}
+.shelf .empty{width:clamp(18px,2.6cqw,28px);height:clamp(18px,2.6cqw,28px);border-radius:6px;box-shadow:inset 0 0 0 1.5px oklch(40% 0.03 300)}
+
+.dlg{display:grid;grid-template-columns:auto 1fr;gap:clamp(14px,3.5cqw,44px);align-items:start}
+.por{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px}
+.por canvas{width:clamp(64px,13cqw,150px);aspect-ratio:24/30;background:oklch(26% 0.04 300);border-radius:12px;padding:6px}
+.por b{margin-top:6px;font-size:clamp(.85rem,1.8cqw,1.1rem)}
+.por small{color:var(--gold);font-size:clamp(.66rem,1.3cqw,.85rem)}
+.talk{display:flex;flex-direction:column;gap:clamp(6px,1.2cqw,12px)}
+.lines{display:flex;flex-direction:column;gap:8px;min-height:5em}
+.lines p{background:oklch(95% 0.02 80);color:var(--ink);padding:.55em .95em;border-radius:14px 4px 14px 14px;max-width:60ch;font-size:clamp(.82rem,1.7cqw,1.05rem);animation:ovIn .4s var(--ease)}
+.fact{font-size:clamp(.74rem,1.45cqw,.92rem);color:oklch(80% 0.03 300);border-top:1px dashed oklch(40% 0.03 300);padding-top:10px;max-width:80ch}
+.fact span{color:var(--gold);font-weight:800}
+
+.res{display:flex;flex-direction:column;gap:clamp(8px,1.6cqw,16px);align-items:flex-start}
+.stats{color:oklch(84% 0.02 300);font-size:clamp(.8rem,1.6cqw,1rem)}
+.souv{display:inline-flex;align-items:center;gap:12px;background:oklch(32% 0.07 70);border-radius:12px;padding:8px 18px 8px 14px}
+.souv span{font-size:clamp(1.5rem,3.6cqw,2.3rem);line-height:1}
+.souv small{display:block;color:var(--gold);font-weight:800;font-size:.8rem}
+.say{display:flex;align-items:center;gap:12px;max-width:62ch;font-size:clamp(.82rem,1.6cqw,1rem)}
+.say canvas{width:clamp(30px,5cqw,52px);aspect-ratio:24/30;flex:none}
+.cast{display:flex;flex-wrap:wrap;gap:clamp(8px,1.6cqw,18px)}
+.cast div{display:flex;flex-direction:column;align-items:center;width:clamp(48px,8cqw,84px);font-size:clamp(.6rem,1.15cqw,.78rem);text-align:center;color:oklch(80% 0.03 300);line-height:1.35}
+.cast canvas{width:clamp(26px,4.6cqw,48px);aspect-ratio:24/30;margin-bottom:4px}
+
+@media (pointer:coarse){.touch{display:flex}.keys{display:none}.stage{width:min(100%, calc((100dvh - 150px) * 16 / 9))}}
+@media (pointer:coarse) and (orientation:landscape){body{padding-top:8px;gap:8px}header{display:none}}
+@media (max-width:760px){
+  .ov{position:fixed;inset:0;z-index:40;border-radius:0;justify-content:flex-start;background:oklch(18% 0.035 300 / .97)}
+  .chars{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ch canvas{width:56px}
+  .stops{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dlg{grid-template-columns:1fr}
+  .por{flex-direction:row;gap:12px;text-align:right}
+  .por canvas{width:64px}
+}
+@media (prefers-reduced-motion:reduce){.ov.on,.lines p{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>AHWAZ, <span>COMPILED</span></h1>
+  <p class="meta">هشت مرحله در خوزستان، از کارون تا اروند. همسفرت را از قوم‌های استان انتخاب کن، سوغاتی جمع کن و از چالش‌ها رد شو.</p>
+</header>
+<main>
+  <div class="stage">
+    <canvas id="game" width="320" height="180" tabindex="0" aria-label="بازی Ahwaz Compiled"></canvas>
+    <div class="ov" id="ov" role="dialog" aria-modal="false" aria-label="منوی بازی"></div>
+  </div>
+  <div class="keys">
+    <span><kbd>←</kbd><kbd>→</kbd> حرکت</span>
+    <span><kbd>SPACE</kbd> پرش (نگه داری = پرش بلندتر)</span>
+    <span><kbd>R</kbd> شروع دوباره‌ی مرحله</span>
+    <span><kbd>ESC</kbd> نقشه</span>
+    <span><kbd>M</kbd> صدا</span>
+  </div>
+  <div class="touch" aria-hidden="true">
+    <div class="pad"><button data-k="left">◀</button><button data-k="right">▶</button></div>
+    <button class="jump" data-k="jump">JUMP</button>
+  </div>
+</main>
+<footer>بدون عکس، بدون فایل صوتی. همه‌ی تصویر و صدا همین لحظه با کد ساخته می‌شود.</footer>
+
+<script>
+(() => {
+'use strict';
+const W = 320, H = 180, WL = 102, RIV = 140, FY = 168, END = 1560, PSX = 110;
+const cv = document.getElementById('game');
+let ctx = cv.getContext('2d', { willReadFrequently: true });
+ctx.imageSmoothingEnabled = false;
+
+// ---------------------------------------------------------------- utils
+function rngf(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const R = rngf(1405), rr = (a, b) => a + R() * (b - a), ri = (a, b) => Math.floor(rr(a, b));
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const sm = x => { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
+const mix = (a, b, t) => { t = clamp(t, 0, 1); return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; };
+const mul = (a, k) => [a[0] * k, a[1] * k, a[2] * k];
+const css = (c, al) => al == null ? `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})` : `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${al})`;
+const pad2 = n => String(Math.max(0, n | 0)).padStart(2, '0');
+
+// ---------------------------------------------------------------- palette / time of day
+const S = {};
+const KEYS = [
+  [0.00, { top: [62, 126, 204], hor: [252, 210, 150], sun: [255, 244, 200], amb: 1.00 }],
+  [0.32, { top: [76, 88, 170], hor: [255, 156, 92], sun: [255, 206, 120], amb: 0.92 }],
+  [0.62, { top: [40, 34, 98], hor: [226, 88, 96], sun: [255, 120, 80], amb: 0.72 }],
+  [1.00, { top: [12, 12, 40], hor: [96, 44, 92], sun: [220, 80, 70], amb: 0.52 }]];
+function setPalette(t) {
+  for (let i = 0; i < KEYS.length - 1; i++) {
+    const [t0, k0] = KEYS[i], [t1, k1] = KEYS[i + 1];
+    if (t <= t1 || i === KEYS.length - 2) {
+      const u = clamp((t - t0) / (t1 - t0), 0, 1);
+      S.top = mix(k0.top, k1.top, u); S.hor = mix(k0.hor, k1.hor, u); S.sun = mix(k0.sun, k1.sun, u);
+      S.amb = k0.amb + (k1.amb - k0.amb) * u; break;
+    }
+  }
+  S.dusk = sm((t - 0.28) / 0.42); S.t = t;
+}
+const lit = (c, h = 0) => mul(mix(c, S.hor, 0.1 + h), S.amb);
+
+// ---------------------------------------------------------------- pixel primitives
+function F(c) { ctx.fillStyle = Array.isArray(c) ? css(c) : c; }
+function rect(x0, y0, x1, y1, c) {
+  F(c); if (x1 < x0) [x0, x1] = [x1, x0]; if (y1 < y0) [y0, y1] = [y1, y0];
+  x0 = Math.round(x0); y0 = Math.round(y0); ctx.fillRect(x0, y0, Math.round(x1) - x0 + 1, Math.round(y1) - y0 + 1);
+}
+function px(x, y, c) { F(c); ctx.fillRect(Math.round(x), Math.round(y), 1, 1); }
+function line(x0, y0, x1, y1, c, w = 1) {
+  F(c); x0 = Math.round(x0); y0 = Math.round(y0); x1 = Math.round(x1); y1 = Math.round(y1);
+  const dx = Math.abs(x1 - x0), dy = -Math.abs(y1 - y0), sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
+  let e = dx + dy; const o = w > 1 ? (w >> 1) : 0;
+  for (let n = 0; n < 1200; n++) {
+    ctx.fillRect(x0 - o, y0 - o, w, w);
+    if (x0 === x1 && y0 === y1) break;
+    const e2 = 2 * e; if (e2 >= dy) { e += dy; x0 += sx; } if (e2 <= dx) { e += dx; y0 += sy; }
+  }
+}
+function pline(p, c, w = 1) { for (let i = 1; i < p.length; i++) line(p[i - 1][0], p[i - 1][1], p[i][0], p[i][1], c, w); }
+function ell(x0, y0, x1, y1, c) {
+  F(c); const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, rx = Math.abs(x1 - x0) / 2, ry = Math.abs(y1 - y0) / 2 || 0.5;
+  for (let y = Math.round(cy - ry); y <= Math.round(cy + ry); y++) {
+    const v = (y - cy) / ry; if (Math.abs(v) > 1) continue;
+    const hw = rx * Math.sqrt(1 - v * v), a = Math.round(cx - hw), b = Math.round(cx + hw);
+    ctx.fillRect(a, y, b - a + 1, 1);
+  }
+}
+function ring(x0, y0, x1, y1, c) {
+  F(c); const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, rx = Math.abs(x1 - x0) / 2, ry = Math.abs(y1 - y0) / 2;
+  const n = Math.max(12, Math.round((rx + ry) * 3));
+  for (let i = 0; i < n; i++) { const a = i / n * 6.2832; ctx.fillRect(Math.round(cx + Math.cos(a) * rx), Math.round(cy + Math.sin(a) * ry), 1, 1); }
+}
+function poly(p, c) { F(c); ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]); for (let i = 1; i < p.length; i++) ctx.lineTo(p[i][0], p[i][1]); ctx.closePath(); ctx.fill(); }
+let GQ = [];
+function glow(x, y, r, c, a) { GQ.push([x, y, r, c, a]); }
+function flushGlow() {
+  for (const [x, y, r, c, a] of GQ) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, css(c, a)); g.addColorStop(1, css(c, 0));
+    ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  }
+  GQ = [];
+}
+
+// ---------------------------------------------------------------- 3x5 pixel font
+const GL = {
+  "A": ".#.#.#####.##.#",
+  "B": "##.#.###.#.###.",
+  "C": ".###..#..#...##",
+  "D": "##.#.##.##.###.",
+  "E": "####..##.#..###",
+  "F": "####..##.#..#..",
+  "G": ".###..#.##.#.##",
+  "H": "#.##.#####.##.#",
+  "I": "###.#..#..#.###",
+  "J": "..#..#..##.#.#.",
+  "K": "#.##.###.#.##.#",
+  "L": "#..#..#..#..###",
+  "M": "#.########.##.#",
+  "N": "##.#.##.##.##.#",
+  "O": ".#.#.##.##.#.#.",
+  "P": "##.#.###.#..#..",
+  "Q": ".#.#.##.###..##",
+  "R": "##.#.###.#.##.#",
+  "S": ".###...#...###.",
+  "T": "###.#..#..#..#.",
+  "U": "#.##.##.##.####",
+  "V": "#.##.##.##.#.#.",
+  "W": "#.##.########.#",
+  "X": "#.##.#.#.#.##.#",
+  "Y": "#.##.#.#..#..#.",
+  "Z": "###..#.#.#..###",
+  "0": "####.##.##.####",
+  "1": ".#.##..#..#.###",
+  "2": "##...#.#.#..###",
+  "3": "##...#.#...###.",
+  "4": "#.##.####..#..#",
+  "5": "####..##...###.",
+  "6": ".###..####.####",
+  "7": "###..#.#..#..#.",
+  "8": "####.#####.####",
+  "9": "####.####..###.",
+  " ": "...............",
+  ",": "..........#.#..",
+  ".": ".............#.",
+  "/": "..#..#.#.#..#..",
+  "-": "......###......",
+  "+": "....#.###.#....",
+  ":": "....#.....#....",
+  "!": ".#..#..#.....#.",
+  "x": "...#.#.#.#.#...",
+  "'": ".#..#.........."
+};
+const tw = (s, sc = 1) => s.length * 4 * sc - sc;
+function text(s, x, y, col, sc = 1, shadow = [12, 10, 20]) {
+  const passes = shadow ? [[shadow, sc], [col, 0]] : [[col, 0]];
+  for (const [c, o] of passes) {
+    F(c); let cx = Math.round(x);
+    for (const ch of s) {
+      const g = GL[ch] || GL[' '];
+      for (let i = 0; i < 15; i++) if (g[i] === '#') ctx.fillRect(cx + (i % 3) * sc + o, Math.round(y) + ((i / 3) | 0) * sc + o, sc, sc);
+      cx += 4 * sc;
+    }
+  }
+}
+const ctext = (s, y, col, sc = 1, sh) => text(s, Math.round((W - tw(s, sc)) / 2), y, col, sc, sh);
+
+const STARS = Array.from({ length: 80 }, () => [ri(0, W), ri(0, 84), R() * 6.28]);
+const CLOUDS = Array.from({ length: 8 }, () => [ri(0, 460), ri(10, 58), ri(14, 34)]);
+const BUILD = [];
+{ let x = -10; while (x < 720) {
+  const r = R(); let kind, w, h;
+  if (r < 0.08) { kind = 'dome'; w = ri(12, 18); h = ri(8, 12); }
+  else if (r < 0.13) { kind = 'tower'; w = 4; h = ri(30, 40); }
+  else if (r < 0.19) { kind = 'tank'; w = 8; h = ri(18, 24); }
+  else { kind = 'box'; w = ri(7, 20); h = ri(6, 27); }
+  const wins = []; for (let i = 0; i < Math.max(1, (w * h / 13) | 0); i++) wins.push([ri(1, Math.max(2, w - 1)), ri(2, Math.max(3, h - 1)), R()]);
+  BUILD.push({ x, w, h, kind, wins, shade: rr(-0.06, 0.06) }); x += w + ri(-2, 3);
+} }
+const FARPALMS = Array.from({ length: 46 }, () => ri(-20, 1200)).sort((a, b) => a - b);
+const WB = { x: 150, l: 232, deck: 93, spans: 4 };
+const BB = { x: 560, l: 330, deck: 92, top: 80, spans: 6 };
+const PALMS = [[40, 50], [205, 56], [330, 46], [545, 58], [700, 50], [905, 54], [1040, 48], [1230, 56], [1420, 50], [1610, 54]];
+const FGPALMS = [[330, 150], [760, 160], [1180, 150], [1620, 158], [2060, 150], [2420, 156]];
+const LAMPS = Array.from({ length: 16 }, (_, k) => 40 + 110 * k);
+const BENCHES = [375, 835, 1330];
+const STALL = 990;
+const SIGNS = [[140, 'AHWAZ'], [440, 'KARUN'], [1180, 'KIANPARS']];
+const PUDDLES = [[260, 30], [500, 34], [770, 28], [1120, 32], [1390, 30]].map(([x, w]) => ({ x, w, sf: -999 }));
+const FLAG = END - 10;
+const DATES = Array.from({ length: 24 }, (_, i) => ({ x: 150 + 57 * i, h: i % 4 === 2 ? 44 : 13, got: false }));
+const FLOCKS = [[190, 5], [425, 6], [655, 4], [930, 7], [1250, 6], [1480, 5]].map(([wx, n]) => ({
+  wx, fs: -1, cooed: 0,
+  birds: Array.from({ length: n }, () => ({ dx: rr(-10, 10), dy: rr(-3, 3), ph: rr(0, 6.28), face: R() < 0.5 ? -1 : 1, vx: rr(0.3, 2.4) * (R() < 0.25 ? -1 : 1), vy: rr(-2.4, -1.2), delay: ri(0, 5) }))
+}));
+const TOTAL_BIRDS = FLOCKS.reduce((s, fl) => s + fl.birds.length, 0);
+function drawSky() {
+  const g = ctx.createLinearGradient(0, 0, 0, WL);
+  g.addColorStop(0, css(S.top)); g.addColorStop(0.55, css(mix(S.top, S.hor, 0.45))); g.addColorStop(1, css(S.hor));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  if (S.dusk > 0.05) for (const [sx, sy, ph] of STARS) {
+    const b = S.dusk * (0.55 + 0.45 * Math.sin(f * 0.105 + ph * 3));
+    if (b > 0.15) px(sx, sy, mix(S.top, [255, 250, 230], b));
+  }
+}
+function sunPos() { return [238 - S.t * 24, 30 + 92 * sm(S.t / 0.62)]; }
+function drawSun() {
+  const [sx, sy] = sunPos(); if (sy > WL + 14) return;
+  const g = ctx.createRadialGradient(sx, sy, 6, sx, sy, 26);
+  g.addColorStop(0, css(S.sun, 0.45)); g.addColorStop(1, css(S.sun, 0)); ctx.fillStyle = g; ctx.fillRect(sx - 26, sy - 26, 52, 52);
+  ell(sx - 10, sy - 10, sx + 10, sy + 10, S.sun);
+  ell(sx - 6, sy - 8, sx + 2, sy - 4, mix(S.sun, [255, 255, 255], 0.5));
+}
+function drawClouds(c) {
+  const col = mix(mix([255, 250, 245], S.hor, 0.45), S.top, S.dusk * 0.55);
+  const rim = mix(col, S.sun, 0.35 * (1 - S.dusk));
+  for (const [x, y, w] of CLOUDS) {
+    const sx = ((x - c * 0.08 - f * 0.035) % (W + 140) + (W + 140)) % (W + 140) - 70;
+    ell(sx, y, sx + w, y + 6, col); ell(sx + w * 0.2, y - 4, sx + w * 0.6, y + 4, col); ell(sx + w * 0.45, y - 2, sx + w * 0.85, y + 5, col);
+    line(sx + 3, y + 6, sx + w - 3, y + 6, rim);
+  }
+}
+function drawSkyline(c) {
+  const base = mix(mix(S.hor, S.top, 0.35), [22, 20, 42], 0.32 + S.dusk * 0.33);
+  for (const b of BUILD) {
+    const sx = Math.round(b.x - c * 0.25); if (sx > W || sx + b.w < 0) continue;
+    const col = mul(base, 1 + b.shade), top = WL - 3 - b.h;
+    if (b.kind === 'dome') {
+      rect(sx, top, sx + b.w, WL - 3, col); ell(sx + 1, top - b.w / 2, sx + b.w - 1, top + b.w / 2, col);
+      rect(sx + b.w + 1, top - 16, sx + b.w + 2, WL - 3, col); rect(sx + b.w, top - 12, sx + b.w + 3, top - 11, col);
+    } else if (b.kind === 'tower') {
+      rect(sx + 1, top, sx + 3, WL - 3, col); rect(sx, top + 4, sx + 4, top + 7, col); line(sx + 2, top - 6, sx + 2, top, col);
+      if (S.dusk > 0.3 && ((f / 30) | 0) % 2 === 0) { px(sx + 2, top - 6, [255, 60, 50]); glow(sx + 2, top - 6, 4, [255, 60, 50], 0.5); }
+    } else if (b.kind === 'tank') {
+      rect(sx + 3, top + 7, sx + 4, WL - 3, col); ell(sx, top, sx + 8, top + 8, col);
+    } else {
+      rect(sx, top, sx + b.w, WL - 3, col);
+      for (const [wx, wy, th] of b.wins) if (S.dusk > th * 0.9 + 0.08 && top + wy < WL - 4) px(sx + wx, top + wy, [255, 206, 120]);
+    }
+  }
+}
+function smallPalm(x, y, h, col) {
+  line(x, y, x + 1, y - h, col);
+  for (const a of [-2.6, -2.0, -1.2, -0.5, 0.2]) line(x + 1, y - h, x + 1 + Math.cos(a) * 5, y - h - Math.sin(a) * 2 + 2, col);
+}
+function drawFarBank(c) {
+  const col = mix(mix(S.hor, S.top, 0.5), [24, 30, 30], 0.55 + S.dusk * 0.3);
+  rect(0, WL - 4, W, WL - 1, col);
+  FARPALMS.forEach((x, i) => { const sx = x - c * 0.55; if (sx > -10 && sx < W + 10) smallPalm(sx, WL - 4, 9 + i % 4, col); });
+}
+function drawWhiteBridge(c) {
+  const x0 = WB.x - c * 0.55; if (x0 > W + 5 || x0 + WB.l < -5) return;
+  const col = lit([246, 246, 240], 0.08), hang = lit([214, 212, 206], 0.14), pier = lit([186, 180, 170], 0.2);
+  const span = WB.l / WB.spans;
+  for (let i = 0; i <= WB.spans; i++) { const p = x0 + i * span; rect(p - 1, WB.deck, p + 1, WL, pier); }
+  for (let i = 0; i < WB.spans; i++) {
+    const a = x0 + i * span;
+    for (let k = 4; k < span - 3; k += 5) line(a + k, WB.deck - 2 - 24 * Math.sin(Math.PI * k / span), a + k, WB.deck, hang);
+    const pts = []; for (let k = 0; k <= span; k += 3) pts.push([a + k, WB.deck - 2 - 24 * Math.sin(Math.PI * k / span)]);
+    pline(pts, col, 2);
+  }
+  rect(x0, WB.deck, x0 + WB.l, WB.deck + 2, col); line(x0, WB.deck + 3, x0 + WB.l, WB.deck + 3, pier);
+  if (ev.bridge >= 0) {
+    const since = (f - ev.bridge) / 2; let idx = 0;
+    for (let i = 0; i < WB.spans; i++) {
+      const a = x0 + i * span;
+      for (let k = 0; k <= span; k += 6) {
+        idx++; if (since < idx * 0.7) continue;
+        const y = WB.deck - 3 - 24 * Math.sin(Math.PI * k / span);
+        const lc = (idx + ((f / 40) | 0)) % 3 ? [255, 230, 160] : [150, 225, 255];
+        px(a + k, y, lc); glow(a + k, y, 3.5, lc, 0.55);
+      }
+    }
+    if (since > 30) for (let k = 0; k < WB.l; k += 8) px(x0 + k, WB.deck + 1, [255, 220, 150]);
+  }
+}
+function drawTrain(x0) {
+  if (ev.train < 0) return;
+  const head = BB.x + BB.l + 30 - (f - ev.train) * 0.75, shift = x0 - BB.x, lo = x0, hi = x0 + BB.l;
+  const cars = [[0, 22, true], [24, 18], [44, 18], [64, 18], [84, 18], [104, 18]];
+  for (const [off, ln, loco] of cars) {
+    const a = head + off + shift, b = a + ln, ca = Math.max(a, lo), cb = Math.min(b, hi);
+    if (cb <= ca) continue;
+    rect(ca, BB.deck - 8, cb, BB.deck - 1, lit(loco ? [44, 78, 150] : [70, 96, 150]));
+    line(ca, BB.deck - 4, cb, BB.deck - 4, lit([230, 230, 225]));
+    for (let wx = Math.ceil(a) + 3; wx < b - 2; wx += 4) if (wx >= ca && wx <= cb) px(wx, BB.deck - 6, S.dusk > 0.4 ? [255, 214, 130] : lit([150, 190, 220]));
+    if (loco && a >= lo && a <= hi) { glow(a - 3, BB.deck - 5, 6, [255, 240, 180], 0.7); px(a, BB.deck - 5, [255, 250, 210]); }
+  }
+}
+function drawBlackBridge(c) {
+  const x0 = BB.x - c * 0.55; if (x0 > W + 5 || x0 + BB.l < -5) return;
+  const iron = lit([36, 34, 42], 0.04), stone = lit([122, 100, 80], 0.2), span = BB.l / BB.spans;
+  for (let i = 0; i <= BB.spans; i++) { const p = x0 + i * span; rect(p - 2, BB.deck, p + 2, WL, stone); line(p - 2, BB.deck + 1, p + 2, BB.deck + 1, mul(stone, 1.2)); }
+  drawTrain(x0);
+  rect(x0, BB.deck, x0 + BB.l, BB.deck + 2, iron);
+  for (let i = 0; i < BB.spans; i++) {
+    const a = x0 + i * span, b = a + span;
+    line(a, BB.deck, a + 4, BB.top, iron); line(a + 4, BB.top, b - 4, BB.top, iron, 2); line(b - 4, BB.top, b, BB.deck, iron);
+    for (let k = 0; k < 5; k++) {
+      const xa = a + 4 + (span - 8) * k / 5, xb = a + 4 + (span - 8) * (k + 1) / 5;
+      line(xa, BB.top, xb, BB.deck, iron); line(xb, BB.top, xa, BB.deck, iron);
+    }
+  }
+}
+let waterImg = null;
+function drawWater() {
+  const src = ctx.getImageData(0, 0, W, WL).data;
+  const HH = RIV - WL; if (!waterImg) waterImg = ctx.createImageData(W, HH);
+  const o = waterImg.data, wc = mix(mix(S.top, S.hor, 0.3), [18, 42, 62], 0.5), t = f / 2;
+  for (let k = 0; k < HH; k++) {
+    const sy = Math.max(0, WL - 1 - Math.floor(k * 1.12));
+    const off = Math.round(Math.sin(k * 0.73 + t * 0.19) * (0.5 + k * 0.07));
+    const dp = k / HH, a = 0.64 - 0.28 * dp, b = 1 - a;
+    for (let x = 0; x < W; x++) {
+      const sx = ((x - off) % W + W) % W, si = (sy * W + sx) * 4, oi = (k * W + x) * 4;
+      o[oi] = src[si] * a + wc[0] * b; o[oi + 1] = src[si + 1] * a + wc[1] * b; o[oi + 2] = src[si + 2] * a + wc[2] * b; o[oi + 3] = 255;
+    }
+  }
+  ctx.putImageData(waterImg, 0, WL);
+  const r = rngf((f / 4) | 0), hl = css(mix(S.hor, [255, 255, 255], 0.3), 0.4);
+  ctx.fillStyle = hl;
+  for (let i = 0; i < 26; i++) ctx.fillRect((r() * (W - 6)) | 0, WL + 1 + ((r() * (HH - 2)) | 0), 2 + ((r() * 4) | 0), 1);
+  const [sx, sy] = sunPos();
+  if (sy < WL + 6) {
+    ctx.fillStyle = css(S.sun, 0.7);
+    for (let i = 0; i < 30; i++) {
+      const y = WL + 1 + ((r() * (HH - 2)) | 0), spread = 4 + (y - WL) * 0.45;
+      ctx.fillRect(Math.round(sx + (r() * 2 - 1) * spread), y, 1 + ((r() * 4) | 0), 1);
+    }
+  }
+}
+function drawBoat(c) {
+  const bx = ((f * 0.45) % 1500) - 120 - c * 0.3, by = 120 + Math.sin(f * 0.06) * 0.6;
+  if (bx < -40 || bx > W + 20) return;
+  const foam = mix(S.hor, [255, 255, 255], 0.6);
+  for (let k = 0; k < 5; k++) { const wl = bx - 12 - k * 6 - ((f / 2) % 6); line(wl, by + 3 + k * 0.4, wl + 3, by + 3 + k * 0.4, foam); }
+  poly([[bx - 10, by], [bx + 11, by], [bx + 7, by + 4], [bx - 8, by + 4]], lit([236, 232, 222]));
+  line(bx - 9, by + 2, bx + 9, by + 2, lit([180, 50, 45]));
+  rect(bx - 3, by - 5, bx + 4, by - 1, lit([70, 110, 150]));
+  rect(bx - 7, by - 4, bx - 6, by - 1, lit([196, 146, 104])); rect(bx - 7, by - 6, bx - 6, by - 5, lit([30, 30, 30]));
+  if (S.dusk > 0.45) { px(bx + 4, by - 6, [255, 230, 150]); glow(bx + 4, by - 6, 4, [255, 230, 150], 0.6); }
+}
+function drawRailing(c) {
+  const iron = lit([44, 60, 58]);
+  rect(0, 131, W, 131, iron); rect(0, 135, W, 135, iron);
+  const k0 = Math.floor(c / 12);
+  for (let k = k0 - 1; k < k0 + 30; k++) { const x = k * 12 - c; rect(x, 130, x + 1, 140, iron); }
+}
+function drawGround(c) {
+  const stone = lit([170, 144, 108]), tile = lit([202, 178, 138]), grout = lit([168, 142, 106]);
+  rect(0, RIV, W, 145, stone); rect(0, RIV, W, RIV, mul(stone, 1.15)); rect(0, 146, W, H, tile);
+  for (const [y0, y1, off] of [[146, 156, 0], [156, 170, 8], [170, H, 0]]) {
+    rect(0, y1, W, y1, grout);
+    const k0 = Math.floor((c - off) / 16);
+    for (let k = k0 - 1; k < k0 + 22; k++) { const x = k * 16 + off - c; rect(x, y0, x, y1, grout); }
+  }
+}
+function drawPalm(sx, base, h, big) {
+  const trunk = big ? mix(lit([40, 30, 22]), [8, 10, 12], 0.5) : lit([112, 82, 52]), ringc = mul(trunk, 0.8);
+  const frond = big ? mix(lit([20, 44, 24]), [6, 10, 8], 0.5) : lit([42, 112, 52]), frond2 = big ? frond : lit([70, 140, 60]);
+  const w = big ? 8 : 3, sway = Math.sin(f * 0.025 + sx * 0.01) * (big ? 2.5 : 1.2), pts = [];
+  for (let i = 0; i <= 10; i++) { const u = i / 10; pts.push([sx + Math.sin(u * 1.6) * h * 0.08 + sway * u * u, base - h * u]); }
+  pline(pts, trunk, w);
+  for (let i = 1; i < 10; i += big ? 1 : 2) { const [x, y] = pts[i]; line(x - (w >> 1), y, x + (w >> 1), y, ringc); }
+  const [cx, cy] = pts[10], L = h * 0.42;
+  [-3.0, -2.6, -2.1, -1.6, -1.1, -0.6, -0.15, 0.3].forEach((a, j) => {
+    const fp = []; for (let s = 0; s < 6; s++) { const u = s / 5; fp.push([cx + Math.cos(a) * L * u + sway * u, cy + Math.sin(a) * L * u * 0.55 + u * u * L * 0.55]); }
+    pline(fp, j % 2 ? frond : frond2, big ? 4 : 2);
+  });
+  if (!big) for (let k = 0; k < 5; k++) px(cx - 2 + k, cy + 3 + (k % 2), lit([200, 110, 40]));
+}
+function lampOn() {
+  if (ev.lamps < 0) return false; const d = f - ev.lamps;
+  return !(d >= 6 && d < 12) && !(d >= 18 && d < 22);
+}
+function drawLamp(sx) {
+  const iron = lit([34, 38, 40]);
+  rect(sx, 108, sx + 1, 146, iron); rect(sx - 1, 144, sx + 2, 146, iron); rect(sx, 108, sx + 5, 108, iron);
+  const on = lampOn();
+  rect(sx + 4, 109, sx + 6, 110, on ? [255, 226, 150] : lit([200, 200, 190]));
+  if (on) { glow(sx + 5, 110, 10, [255, 214, 140], 0.55); glow(sx + 5, 158, 18, [255, 210, 130], 0.22); }
+}
+function drawBench(sx) {
+  const wood = lit([120, 78, 46]), iron = lit([40, 40, 44]);
+  rect(sx - 10, 147, sx + 10, 148, wood); rect(sx - 10, 150, sx + 10, 151, wood);
+  rect(sx - 9, 152, sx - 8, 156, iron); rect(sx + 8, 152, sx + 9, 156, iron);
+}
+function drawSign(sx, label) {
+  const w = tw(label) + 4;
+  rect(sx, 126, sx + 1, 147, lit([150, 150, 150]));
+  rect(sx - (w >> 1), 118, sx + (w >> 1) + 1, 126, lit([30, 80, 160]));
+  ctx.strokeStyle = css(lit([230, 230, 230])); ctx.lineWidth = 1;
+  ctx.strokeRect(Math.round(sx - (w >> 1)) + 0.5, 118.5, (w >> 1) * 2 + 1, 8);
+  text(label, sx - (w >> 1) + 3, 120, lit([250, 250, 250]), 1, null);
+}
+function drawStall(sx) {
+  const cart = lit([40, 130, 128]), red = lit([200, 44, 44]), white = lit([240, 236, 226]), gold = lit([214, 170, 60]);
+  rect(sx - 14, 134, sx + 14, 148, cart); rect(sx - 14, 134, sx + 14, 135, mul(cart, 1.25));
+  ell(sx - 12, 145, sx - 6, 151, lit([30, 30, 30])); ell(sx + 6, 145, sx + 12, 151, lit([30, 30, 30]));
+  rect(sx - 13, 118, sx - 12, 134, lit([90, 70, 50])); rect(sx + 12, 118, sx + 13, 134, lit([90, 70, 50]));
+  for (let k = 0; k < 8; k++) rect(sx - 16 + k * 4, 116, sx - 13 + k * 4, 120, k % 2 ? white : red);
+  rect(sx - 11, 109, sx + 11, 115, lit([250, 214, 110]));
+  text('GAHWA', sx - 9, 110, lit([110, 40, 20]), 1, null);
+  poly([[sx - 4, 133], [sx + 1, 133], [sx, 128], [sx - 3, 128]], gold);
+  line(sx + 1, 130, sx + 4, 127, gold); rect(sx - 3, 126, sx, 127, gold);
+  for (let k = 0; k < 4; k++) { const u = ((f * 0.3 + k * 5) % 20); px(sx + 4 + Math.sin((f / 2 + k * 7) * 0.2) * 1.5, 126 - u, mix(lit([230, 230, 230]), S.hor, u / 22)); }
+  for (let k = 0; k < 3; k++) rect(sx + 5 + k * 3, 132, sx + 6 + k * 3, 133, white);
+  rect(sx + 17, 131, sx + 21, 147, lit([90, 70, 60])); rect(sx + 17, 126, sx + 20, 130, lit([186, 136, 96]));
+  rect(sx + 16, 124, sx + 21, 126, white); px(sx + 17, 128, lit([20, 20, 20]));
+}
+function drawPuddle(p, sx) {
+  const cy = 169, w = p.w;
+  ell(sx - w / 2 - 2, cy - 4, sx + w / 2 + 2, cy + 4, lit([150, 128, 96]));
+  const refl = mix(mix(S.top, S.hor, 0.45), [255, 255, 255], 0.12);
+  ell(sx - w / 2, cy - 3, sx + w / 2, cy + 3, refl);
+  line(sx - w / 4, cy - 1, sx + w / 6, cy - 1, mix(refl, [255, 255, 255], 0.4));
+  if (lampOn()) px(sx + 3, cy, [255, 220, 150]);
+  const tt = (f - p.sf) / 2;
+  if (tt >= 0 && tt < 26) { const r = 2 + tt * 0.9; ring(sx - r, cy - r * 0.3, sx + r, cy + r * 0.3, mix(refl, [255, 255, 255], 0.6)); }
+  const rg = rngf(((f / 18) | 0) + p.x);
+  if (rg() < 0.3) { const rx = sx + (rg() * 2 - 1) * w / 3; ring(rx - 2, cy - 1, rx + 2, cy + 1, mix(refl, [255, 255, 255], 0.5)); }
+}
+function drawDate(sx, y) {
+  y += Math.sin(f * 0.075 + sx * 0.1) * 1.2;
+  ell(sx - 2, y - 3, sx + 2, y + 2, lit([126, 62, 26])); px(sx - 1, y - 2, lit([226, 150, 70])); px(sx, y - 4, lit([90, 120, 50]));
+  if ((f / 2 + (sx | 0)) % 24 < 3) glow(sx, y - 1, 5, [255, 230, 150], 0.6);
+}
+function drawPigeonGround(x, y, b) {
+  const body = lit([130, 130, 142]), dark = lit([88, 88, 100]), neck = lit([96, 150, 128]), leg = lit([210, 96, 76]);
+  x = Math.round(x); y = Math.round(y); const fc = b.face;
+  rect(x - 2, y - 3, x + 2, y - 1, body); px(x - 3 * fc, y - 3, dark); px(x - 2 * fc, y - 2, dark);
+  const peck = Math.sin(f * 0.165 + b.ph) > 0.55, hx = x + 3 * fc, hy = y - 4 + (peck ? 2 : 0);
+  rect(hx, hy, hx + fc, hy + 1, body); px(x + 2 * fc, y - 3, neck); px(hx + 2 * fc, hy + 1, lit([60, 50, 50]));
+  px(x - 1, y, leg); px(x + 1, y, leg);
+}
+function drawPigeonFly(x, y, b) {
+  const body = lit([130, 130, 142]), wing = lit([106, 106, 118]), fc = b.vx > 0 ? 1 : -1;
+  x = Math.round(x); y = Math.round(y);
+  rect(x - 2, y - 1, x + 2, y, body); px(x + 3 * fc, y - 1, body);
+  if ((((f / 2) | 0) + b.delay) % 6 < 3) { line(x, y - 1, x - 2 * fc, y - 5, wing); line(x + 1, y - 1, x + 2, y - 4, wing); }
+  else { line(x, y, x - 2 * fc, y + 3, wing); line(x + 1, y, x + 2, y + 3, wing); }
+}
+function drawFlock(fl, c) {
+  for (const b of fl.birds) {
+    const gx = fl.wx + b.dx, gy = 168 + b.dy;
+    const tt = fl.fs < 0 ? -1 : (f - fl.fs) / 2 - b.delay;
+    if (tt < 0) { const sx = gx - c; if (sx > -12 && sx < W + 12) drawPigeonGround(sx, gy, b); }
+    else {
+      const x = gx + b.vx * tt * 1.6 - c, y = gy + b.vy * tt - 0.025 * tt * tt;
+      if (x > -12 && x < W + 12 && y > -10) drawPigeonFly(x, y, b);
+    }
+  }
+}
+function drawFlag(sx) {
+  rect(sx, 108, sx + 1, 147, lit([220, 220, 215])); ell(sx - 1, 106, sx + 2, 109, lit([255, 208, 110]));
+  const wave = Math.sin(f * 0.12);
+  poly([[sx + 2, 110], [sx + 20, 111 + wave], [sx + 18, 118 + wave], [sx + 2, 119]], lit([40, 140, 70]));
+  poly([[sx + 2, 119], [sx + 18, 118 + wave], [sx + 17, 124 + wave], [sx + 2, 126]], lit([240, 236, 226]));
+  rect(sx - 4, 146, sx + 5, 148, lit([120, 100, 80]));
+}
+let VIG = null;
+function vignette() {
+  if (!VIG) {
+    VIG = document.createElement('canvas'); VIG.width = W; VIG.height = H;
+    const v = VIG.getContext('2d'), g = v.createRadialGradient(W / 2, H / 2, 60, W / 2, H / 2, 200);
+    g.addColorStop(0, 'rgba(14,8,26,0)'); g.addColorStop(1, 'rgba(14,8,26,0.42)'); v.fillStyle = g; v.fillRect(0, 0, W, H);
+  }
+  ctx.drawImage(VIG, 0, 0);
+}
+function shade(k) { ctx.fillStyle = css([14, 10, 24], k); ctx.fillRect(0, 0, W, H); }
+// ---------------------------------------------------------------- audio: every sound from oscillators + noise
+const A = { ctx: null, muted: false };
+function initAudio() {
+  if (A.ctx) { if (A.ctx.state === 'suspended') A.ctx.resume(); return; }
+  const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+  const ac = new AC(); A.ctx = ac;
+  A.master = ac.createGain(); A.master.gain.value = A.muted ? 0 : 0.8;
+  const comp = ac.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 4;
+  A.master.connect(comp); comp.connect(ac.destination);
+  A.sfx = ac.createGain(); A.sfx.gain.value = 0.9; A.sfx.connect(A.master);
+  A.mus = ac.createGain(); A.mus.gain.value = 0.55; A.mus.connect(A.master);
+  A.amb = ac.createGain(); A.amb.gain.value = 1; A.amb.connect(A.master);
+  const len = ac.sampleRate * 2;
+  const nb = ac.createBuffer(1, len, ac.sampleRate), nd = nb.getChannelData(0);
+  for (let i = 0; i < len; i++) nd[i] = Math.random() * 2 - 1;
+  const bb = ac.createBuffer(1, len, ac.sampleRate), bd = bb.getChannelData(0); let last = 0;
+  for (let i = 0; i < len; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; bd[i] = last * 3.5; }
+  A.noise = nb; A.brown = bb;
+  startAmbience();
+}
+const now = () => (A.ctx ? A.ctx.currentTime : 0);
+function out(node, pan, dest) {
+  if (pan && A.ctx.createStereoPanner) { const p = A.ctx.createStereoPanner(); p.pan.value = pan; node.connect(p); p.connect(dest); }
+  else node.connect(dest);
+}
+function env(g, t, a, v, d) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(v, 0.0002), t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + a + d); }
+function tone({ type = 'square', f0 = 440, f1 = 0, t, a = 0.005, d = 0.2, v = 0.2, dest, pan = 0, vib = 0 }) {
+  if (!A.ctx) return; t = t ?? now(); dest = dest || A.sfx;
+  const o = A.ctx.createOscillator(); o.type = type; o.frequency.setValueAtTime(f0, t);
+  if (f1) o.frequency.exponentialRampToValueAtTime(f1, t + a + d);
+  if (vib) { const l = A.ctx.createOscillator(), lg = A.ctx.createGain(); l.frequency.value = vib; lg.gain.value = f0 * 0.02; l.connect(lg); lg.connect(o.frequency); l.start(t); l.stop(t + a + d + 0.05); }
+  const g = A.ctx.createGain(); env(g, t, a, v, d); o.connect(g); out(g, pan, dest); o.start(t); o.stop(t + a + d + 0.05);
+}
+function hiss({ t, type = 'lowpass', freq = 1000, f1 = 0, q = 0.7, a = 0.003, d = 0.1, v = 0.3, dest, pan = 0 }) {
+  if (!A.ctx) return; t = t ?? now(); dest = dest || A.sfx;
+  const s = A.ctx.createBufferSource(); s.buffer = A.noise;
+  const fl = A.ctx.createBiquadFilter(); fl.type = type; fl.frequency.setValueAtTime(freq, t); fl.Q.value = q;
+  if (f1) fl.frequency.exponentialRampToValueAtTime(f1, t + a + d);
+  const g = A.ctx.createGain(); env(g, t, a, v, d); s.connect(fl); fl.connect(g); out(g, pan, dest);
+  s.start(t, Math.random() * 1.5); s.stop(t + a + d + 0.05);
+}
+function loopNoise(buf, type, freq, q, gain, dest) {
+  const s = A.ctx.createBufferSource(); s.buffer = buf; s.loop = true;
+  const fl = A.ctx.createBiquadFilter(); fl.type = type; fl.frequency.value = freq; fl.Q.value = q;
+  const g = A.ctx.createGain(); g.gain.value = gain; s.connect(fl); fl.connect(g); g.connect(dest || A.amb); s.start();
+  return g;
+}
+const SC = [0, 1, 4, 5, 7, 8, 10, 12, 13, 16, 17, 19, 20, 22, 24]; // Hijaz on D
+const deg = (n, b = 293.66) => b * Math.pow(2, SC[n] / 12);
+const SFX = {
+  step(kind) {
+    if (!A.ctx) return; const t = now();
+    if (kind === 'splash') { hiss({ t, type: 'bandpass', freq: 1800, q: 0.6, d: 0.18, v: 0.18 }); return; }
+    hiss({ t, freq: 900, d: 0.06, v: 0.22 }); tone({ type: 'sine', f0: 95, t, d: 0.06, v: 0.12 });
+    if (kind === 'wet') { hiss({ t, type: 'highpass', freq: 1800, d: 0.08, v: 0.07 }); tone({ type: 'sine', f0: 700, f1: 260, t, d: 0.09, v: 0.035 }); }
+  },
+  splash(big) {
+    if (!A.ctx) return; const t = now();
+    hiss({ t, type: 'bandpass', freq: 1500, q: 0.6, d: big ? 0.45 : 0.3, v: big ? 0.5 : 0.35 });
+    for (let i = 0; i < (big ? 9 : 5); i++) tone({ type: 'sine', f0: 1000 + Math.random() * 1100, f1: 400 + Math.random() * 400, t: t + 0.04 + Math.random() * 0.35, d: 0.05, v: 0.06 });
+  },
+  jump() { tone({ f0: 220, f1: 740, d: 0.16, v: 0.1 }); },
+  land(p) { const t = now(); tone({ type: 'sine', f0: 140, f1: 50, t, d: 0.12, v: 0.35, pan: p }); hiss({ t, freq: 600, d: 0.08, v: 0.2, pan: p }); },
+  date() { const t = now(); tone({ f0: 988, t, d: 0.06, v: 0.08 }); tone({ f0: 1319, t: t + 0.07, d: 0.25, v: 0.08 }); },
+  coo(p) {
+    const t = now();
+    tone({ type: 'triangle', f0: 330, f1: 360, t, a: 0.06, d: 0.16, v: 0.13, pan: p, vib: 24 });
+    tone({ type: 'triangle', f0: 360, f1: 280, t: t + 0.27, a: 0.08, d: 0.3, v: 0.13, pan: p, vib: 24 });
+  },
+  flock(p, n) {
+    if (!A.ctx) return; const t = now();
+    hiss({ t, type: 'bandpass', freq: 600, q: 0.8, a: 0.25, d: 0.5, v: 0.15, pan: p });
+    for (let b = 0; b < n; b++) for (let i = 0; i < 8; i++) hiss({ t: t + b * 0.05 + i / 13, type: 'bandpass', freq: 1200, q: 1, d: 0.03, v: 0.12 * Math.exp(-i * 0.35), pan: clamp(p + (Math.random() - 0.5) * 0.4, -1, 1) });
+  },
+  clink(p) {
+    if (!A.ctx) return; const t = now();
+    for (const tt of [0, 0.22]) [[2130, 0.5], [3310, 0.35], [5230, 0.25], [6870, 0.18]].forEach(([fq, d]) => tone({ type: 'sine', f0: fq, t: t + tt, d, v: tt ? 0.025 : 0.04, pan: p }));
+  },
+  lamp() {
+    if (!A.ctx) return; const t = now();
+    for (const o of [0, 0.11, 0.3]) hiss({ t: t + o, type: 'highpass', freq: 2000, d: 0.012, v: 0.2 });
+    tone({ type: 'sine', f0: 100, t, a: 0.01, d: 1.2, v: 0.07 }); tone({ type: 'sine', f0: 200, t, a: 0.01, d: 1, v: 0.035 });
+  },
+  shimmer(p) {
+    if (!A.ctx) return; const t = now();
+    [0, 2, 3, 4, 6, 7, 9].forEach((n, k) => { const f0 = deg(n, 587.33); tone({ type: 'sine', f0, t: t + k * 0.13, d: 0.6, v: 0.06, pan: p }); tone({ type: 'sine', f0: f0 * 2.76, t: t + k * 0.13, d: 0.35, v: 0.02, pan: p }); });
+  },
+  horn(p) {
+    if (!A.ctx) return; const t = now();
+    for (const fq of [311, 392, 466]) tone({ type: 'sawtooth', f0: fq, t, a: 0.06, d: 1.2, v: 0.022, pan: p, vib: 5 });
+  },
+  trainStart() {
+    if (!A.ctx) return;
+    const g = loopNoise(A.brown, 'lowpass', 160, 0.7, 0.0001);
+    const t = now(); g.gain.exponentialRampToValueAtTime(0.35, t + 3); g.gain.setValueAtTime(0.35, t + 16); g.gain.exponentialRampToValueAtTime(0.0001, t + 22);
+    A.train = { until: t + 20, next: t + 0.5 };
+    setTimeout(() => SFX.horn(0.5), 700); setTimeout(() => SFX.horn(-0.2), 8000);
+  },
+  carhorn(p) { if (!A.ctx) return; const t = now(); for (const o of [0, 0.24]) for (const fq of [420, 530]) tone({ f0: fq, t: t + o, d: 0.14, v: 0.015, pan: p }); },
+  gull(p) { tone({ type: 'sawtooth', f0: 1500, f1: 850, a: 0.05, d: 0.35, v: 0.02, pan: p }); },
+  bird(p) { if (!A.ctx) return; const t = now(); for (let k = 0; k < 3; k++) tone({ type: 'sine', f0: 2400, f1: 4200, t: t + k * 0.1, d: 0.05, v: 0.035, pan: p }); },
+  cricket(p) { if (!A.ctx) return; const t = now(); for (let k = 0; k < 3; k++) tone({ type: 'sine', f0: 4700, t: t + k * 0.05, a: 0.008, d: 0.018, v: 0.025, pan: p }); },
+  start() { if (!A.ctx) return; const t = now(); [523, 659, 784, 1047].forEach((fq, i) => tone({ f0: fq, t: t + i * 0.06, d: 0.08, v: 0.09 })); },
+  clear() {
+    if (!A.ctx) return; let t = now() + 0.05;
+    for (const [fq, d] of [[587.33, 0.12], [739.99, 0.12], [880, 0.12], [1174.66, 0.5], [1046.5, 0.14], [1174.66, 0.8]]) {
+      tone({ f0: fq, t, d: d * 0.95, v: 0.09 }); tone({ type: 'triangle', f0: fq / 2, t, d: d * 0.95, v: 0.12 }); t += d;
+    }
+  },
+  timeup() { if (!A.ctx) return; const t = now(); [784, 659, 523, 392].forEach((fq, i) => tone({ f0: fq, t: t + i * 0.16, d: 0.15, v: 0.08 })); },
+};
+function startAmbience() {
+  loopNoise(A.brown, 'lowpass', 700, 0.5, 0.32);
+  A.wind = loopNoise(A.noise, 'bandpass', 520, 0.8, 0.03);
+  A.cic = A.ctx.createGain(); A.cic.gain.value = 0;
+  const cs = A.ctx.createBufferSource(); cs.buffer = A.noise; cs.loop = true;
+  const cf = A.ctx.createBiquadFilter(); cf.type = 'highpass'; cf.frequency.value = 5200;
+  const am = A.ctx.createGain(); am.gain.value = 0.5;
+  const lfo = A.ctx.createOscillator(); lfo.frequency.value = 46; const lg = A.ctx.createGain(); lg.gain.value = 0.5;
+  lfo.connect(lg); lg.connect(am.gain); cs.connect(cf); cf.connect(am); am.connect(A.cic); A.cic.connect(A.amb); cs.start(); lfo.start();
+  setInterval(schedMusic, 40);
+}
+function ambientEvents() {
+  if (!A.ctx) return;
+  const day = 1 - S.dusk, night = S.dusk;
+  if (Math.random() < 0.004 * day) SFX.bird((Math.random() - 0.5) * 1.6);
+  if (LV && LV.water && Math.random() < 0.0025) SFX.gull((Math.random() - 0.5) * 1.2);
+  if (LV && LV.city2 && Math.random() < 0.0018) SFX.carhorn((Math.random() - 0.5) * 1.8);
+  if (Math.random() < 0.03 * night) SFX.cricket((Math.random() - 0.5) * 1.4);
+}
+function audioTick() {
+  if (!A.ctx) return;
+  const t = now(), day = 1 - (S.dusk || 0);
+  if (A.cic) A.cic.gain.setTargetAtTime(0.05 * day, t, 0.3);
+  if (A.wind) A.wind.gain.setTargetAtTime(0.03 + 0.03 * (S.dusk || 0), t, 0.5);
+  if (A.train && t < A.train.until) {
+    while (A.train.next < t + 0.1) {
+      for (const o of [0, 0.09]) hiss({ t: A.train.next + o, type: 'bandpass', freq: 2500, q: 0.9, d: 0.03, v: o ? 0.07 : 0.09, pan: 0.2 });
+      A.train.next += 0.42;
+    }
+  }
+}
+// music: Hijaz chiptune over a maqsum rhythm
+const MEL_SRC = [
+  [4, '-', 3, 2, 1, '-', 2, '-', 0, '-', '-', null, 1, 2, 3, '-'],
+  [4, 5, 4, 3, 2, '-', 1, '-', 2, 3, 2, 1, 0, '-', '-', null],
+  [4, '-', 3, 2, 1, '-', 2, '-', 0, '-', '-', null, 1, 2, 3, '-'],
+  [4, 5, 6, 5, 4, 3, 2, 1, 1, '-', 0, '-', '-', '-', null, null],
+  [7, '-', 6, 5, 4, '-', 5, 6, 7, 8, 7, 6, 5, '-', 4, '-'],
+  [4, 5, 6, 5, 4, 3, 2, 1, 1, '-', 0, '-', '-', '-', null, null]].flat();
+const MEL = [];
+for (let i = 0; i < MEL_SRC.length; i++) {
+  const n = MEL_SRC[i];
+  if (typeof n === 'number') { let ln = 1; while (MEL_SRC[i + ln] === '-') ln++; MEL[i] = { n, ln }; }
+}
+const ROOTS = [73.42, 73.42, 65.41, 73.42, 98.0, 73.42, 65.41, 73.42];
+const M = { on: false, next: 0, step: 0, key: 1 };
+function startMusic() { if (!A.ctx) return; M.on = true; M.step = 0; M.next = now() + 0.15; }
+function stopMusic() { M.on = false; }
+function schedMusic() {
+  if (!A.ctx || !M.on) return;
+  const E8 = 0.25;
+  while (M.next < now() + 0.2) {
+    const s = M.step, t = M.next, st = s % 8, bar = (s / 8) | 0, dest = A.mus;
+    if (st === 0 || st === 4) { tone({ type: 'sine', f0: 130, f1: 55, t, d: 0.28, v: 0.4, dest }); hiss({ t, freq: 300, d: 0.05, v: 0.12, dest }); }
+    if (st === 1 || st === 3 || st === 6) hiss({ t, type: 'bandpass', freq: 3000, q: 0.8, d: 0.06, v: 0.13, dest, pan: 0.25 });
+    hiss({ t: t + E8 / 2, type: 'highpass', freq: 7000, d: 0.03, v: 0.05, dest, pan: -0.3 });
+    const root = ROOTS[bar % 8] * M.key;
+    if (st === 0 || st === 3 || st === 4 || st === 6) tone({ type: 'triangle', f0: root * (st === 3 ? 2 : 1), t, d: 0.2, v: 0.25, dest });
+    if (bar >= 2) {
+      const ev = MEL[(s - 16) % MEL_SRC.length];
+      if (ev) { tone({ f0: deg(ev.n, 293.66 * M.key), t, d: ev.ln * E8 * 0.9, v: 0.045, dest, pan: 0.1, vib: 5.5 }); tone({ f0: deg(ev.n, 293.66 * M.key), t: t + 0.375, d: ev.ln * E8 * 0.8, v: 0.015, dest, pan: -0.4 }); }
+    }
+    if (bar % 16 >= 10) for (let sub = 0; sub < 2; sub++) tone({ f0: deg([0, 2, 4, 7][(st * 2 + sub) % 4], 587.33), t: t + sub * E8 / 2, d: 0.08, v: 0.012, dest, pan: sub ? 0.5 : -0.5 });
+    M.step++; M.next += E8;
+  }
+}
+
+
+// ================================================================ NEW ART: helpers
+const hsh = k => { k |= 0; k = Math.imul(k ^ 0x9e3779b9, 0x85ebca6b); k ^= k >>> 13; k = Math.imul(k, 0xc2b2ae35); return ((k ^ k >>> 16) >>> 0) / 4294967296; };
+const tri = t => Math.abs(((t % 2) + 2) % 2 - 1);
+const hazeC = (k, c) => mix(mix(S.hor, S.top, k), c, 0.4 + S.dusk * 0.25);
+function mounds(c, par, base, col, amp, freq, seed) {
+  F(col);
+  for (let x = 0; x < W; x++) { const wx = x + c * par; const h = amp * (0.5 + 0.5 * Math.sin(wx * freq + seed)) * (0.6 + 0.4 * Math.sin(wx * freq * 2.7 + seed * 3)); ctx.fillRect(x, Math.round(base - h), 1, Math.round(h) + 1); }
+}
+function mountains(c, par, base, col, amp, freq, seed) {
+  F(col);
+  for (let x = 0; x < W; x++) { const wx = x + c * par; const h = amp * (0.55 * tri(wx * freq + seed) + 0.3 * tri(wx * freq * 2.3 + seed * 2) + 0.15 * tri(wx * freq * 5.1)); ctx.fillRect(x, Math.round(base - h), 1, Math.round(h) + 1); }
+}
+
+// ---------------------------------------------------------------- people (player + guides)
+function drawPerson(x, y, O, face, o, air) {
+  x = Math.round(x); y = Math.round(y);
+  const skin = lit(O.skin || [194, 144, 102]), top = lit(O.top), bot = lit(O.bot || O.top), shd = mul(top, 0.8), black = [18, 18, 22], sandal = lit([96, 64, 40]);
+  ctx.save();
+  if (face < 0) { ctx.translate(x * 2 + 1, 0); ctx.scale(-1, 1); }
+  const hc = O.hc ? lit(O.hc) : null, h2 = O.hc2 ? lit(O.hc2) : null;
+  if (O.head === 'veil') poly([[x - 2, y - 23], [x - 5, y - 9], [x - 1, y - 13]], mul(hc, 0.92));
+  if (O.head === 'chador') poly([[x - 2, y - 23], [x - 6, y - 1], [x, y - 1]], mul(hc, 0.92));
+  if (air) { rect(x - 2, y - 4, x, y - 3, sandal); rect(x + 1, y - 3, x + 3, y - 2, sandal); }
+  else { rect(x - 2 + o, y - 1, x + o, y, sandal); rect(x + 1 - o, y - 1, x + 3 - o, y, sandal); }
+  const sw = (o / 2) | 0;
+  if (O.body === 'robe') {
+    poly([[x - 3, y - 17], [x + 4, y - 17], [x + 5 + sw, y - 1], [x - 4 + sw, y - 1]], top);
+    if (O.stripe) { const sc = lit(O.stripe); for (const k of [-2, 0, 2]) line(x + k, y - 16, x + k + sw, y - 2, sc); }
+    line(x - 3, y - 16, x - 4 + sw, y - 3, shd); line(x - 4 + sw, y - 2, x + 4 + sw, y - 2, shd);
+    if (O.belt) line(x - 3, y - 10, x + 4, y - 10, lit(O.belt));
+  } else if (O.body === 'skirt') {
+    rect(x - 2, y - 17, x + 3, y - 10, top);
+    poly([[x - 3, y - 10], [x + 4, y - 10], [x + 6 + sw, y - 1], [x - 5 + sw, y - 1]], bot);
+    line(x - 4 + sw, y - 2, x + 5 + sw, y - 2, mul(bot, 0.75));
+    if (O.skirt2) line(x - 4 + sw, y - 5, x + 5 + sw, y - 5, lit(O.skirt2));
+  } else {
+    const lo = air ? 0 : o;
+    poly([[x - 2, y - 9], [x, y - 9], [x + lo, y - 2], [x - 2 + lo, y - 2]], bot);
+    poly([[x + 1, y - 9], [x + 3, y - 9], [x + 3 - lo, y - 2], [x + 1 - lo, y - 2]], mul(bot, 0.85));
+    rect(x - 2, y - 17, x + 3, y - 9, top);
+    if (O.belt) line(x - 2, y - 10, x + 3, y - 10, lit(O.belt));
+  }
+  if (O.vest) { const vc = lit(O.vest); rect(x - 2, y - 17, x - 1, y - 10, vc); rect(x + 2, y - 17, x + 3, y - 11, vc); }
+  const ax = x + 1 - o, arm = O.arm ? lit(O.arm) : shd;
+  if (air) { line(x + 1, y - 15, x + 4, y - 19, arm); px(x + 4, y - 20, skin); }
+  else { rect(ax, y - 15, ax + 1, y - 10, arm); px(ax + 1, y - 9, skin); }
+  rect(x - 1, y - 21, x + 2, y - 18, skin); px(x + 2, y - 20, black);
+  if (O.beard) rect(x - 1, y - 19, x + 1, y - 18, lit(O.beard)); else line(x + 1, y - 18, x + 2, y - 18, lit([70, 44, 30]));
+  const hair = lit([36, 28, 24]);
+  switch (O.head) {
+    case 'keff':
+      rect(x - 2, y - 24, x + 2, y - 21, hc); poly([[x - 2, y - 22], [x - 5, y - 12], [x - 1, y - 16]], hc);
+      if (h2) for (const [a, b] of [[-1, -23], [1, -23], [0, -22], [2, -22], [-3, -19], [-4, -15], [-2, -17], [-3, -14]]) px(x + a, y + b, h2);
+      line(x - 2, y - 22, x + 2, y - 22, black); break;
+    case 'veil': rect(x - 2, y - 24, x + 2, y - 22, hc); line(x - 2, y - 22, x + 2, y - 22, h2); px(x, y - 22, lit([250, 222, 120])); rect(x - 2, y - 21, x - 2, y - 18, hc); break;
+    case 'chador': rect(x - 2, y - 24, x + 2, y - 22, hc); rect(x - 2, y - 21, x - 2, y - 17, hc); break;
+    case 'scarf':
+      rect(x - 2, y - 24, x + 2, y - 22, hc); rect(x - 2, y - 21, x - 1, y - 17, hc); rect(x - 1, y - 17, x + 2, y - 17, hc);
+      if (h2) { px(x - 1, y - 23, h2); px(x + 1, y - 24, h2); px(x - 2, y - 19, h2); px(x + 1, y - 17, h2); } break;
+    case 'felt': rect(x - 2, y - 23, x + 2, y - 22, hc); rect(x - 1, y - 24, x + 1, y - 24, hc); rect(x - 2, y - 21, x - 2, y - 20, hair); break;
+    case 'tallhat': rect(x - 2, y - 27, x + 2, y - 22, hc); line(x - 2, y - 22, x + 2, y - 22, mul(hc, 1.6)); rect(x - 2, y - 21, x - 2, y - 20, hair); break;
+    case 'cap': rect(x - 2, y - 23, x + 2, y - 22, hc); if (h2) { px(x - 1, y - 23, h2); px(x + 1, y - 23, h2); } rect(x - 2, y - 21, x - 2, y - 20, hair); break;
+    case 'hat': rect(x - 4, y - 22, x + 5, y - 22, hc); rect(x - 2, y - 25, x + 3, y - 23, hc); line(x - 2, y - 23, x + 3, y - 23, h2); break;
+    default: rect(x - 1, y - 22, x + 2, y - 22, hair); rect(x - 2, y - 21, x - 2, y - 20, hair);
+  }
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- collectibles
+function drawItem(k, sx, y, still) {
+  if (!still) y += Math.sin(f * 0.075 + sx * 0.1) * 1.2;
+  sx = Math.round(sx); y = Math.round(y);
+  switch (k) {
+    case 'date': ell(sx - 2, y - 3, sx + 2, y + 2, lit([126, 62, 26])); px(sx - 1, y - 2, lit([226, 150, 70])); px(sx, y - 4, lit([90, 120, 50])); break;
+    case 'shard': poly([[sx - 3, y - 2], [sx + 3, y - 3], [sx + 2, y + 2], [sx - 2, y + 2]], lit([200, 112, 70])); line(sx - 2, y, sx + 2, y - 1, lit([50, 30, 24])); px(sx, y + 1, lit([50, 30, 24])); break;
+    case 'brick': rect(sx - 3, y - 2, sx + 3, y + 2, lit([192, 132, 86])); for (const [a, b] of [[-2, -1], [0, 0], [2, -1], [1, 1], [-1, 1]]) px(sx + a, y + b, lit([92, 56, 36])); break;
+    case 'blossom': { const wc = lit([252, 250, 244]); for (const [a, b] of [[0, -2], [2, 0], [0, 2], [-2, 0], [0, -1], [1, 0], [0, 1], [-1, 0]]) px(sx + a, y + b, wc); px(sx, y, lit([244, 200, 60])); px(sx + 2, y - 2, lit([80, 130, 60])); break; }
+    case 'wheat': { const g = lit([226, 186, 88]); line(sx, y + 3, sx, y - 3, lit([196, 156, 70])); for (let k2 = 0; k2 < 3; k2++) { px(sx - 1, y - 2 + k2 * 2, g); px(sx + 1, y - 3 + k2 * 2, g); } break; }
+    case 'drop': ell(sx - 2, y - 1, sx + 2, y + 3, [26, 24, 30]); px(sx, y - 2, [26, 24, 30]); px(sx, y - 3, [26, 24, 30]); px(sx - 1, y, [120, 210, 230]); px(sx - 1, y + 1, [210, 130, 230]); break;
+    case 'fish': ell(sx - 3, y - 1, sx + 2, y + 2, lit([186, 200, 210])); poly([[sx + 2, y], [sx + 4, y - 2], [sx + 4, y + 3]], lit([150, 170, 184])); px(sx - 2, y, [20, 20, 30]); break;
+  }
+  if (!still && (f / 2 + (sx | 0)) % 24 < 3) glow(sx, y, 5, [255, 230, 150], 0.6);
+}
+
+// ---------------------------------------------------------------- enemies & hazards
+function flipAt(sx, dir) { if (dir < 0) { ctx.translate(sx * 2 + 1, 0); ctx.scale(-1, 1); } }
+function drawScorp(sx, y, dir) {
+  const b = lit([112, 66, 30]), d = lit([70, 40, 18]), st = lit([40, 20, 10]);
+  ctx.save(); flipAt(sx, dir);
+  const lg = ((f / 5) | 0) % 2;
+  for (let k = -2; k <= 2; k += 2) { px(sx + k + lg, y, d); px(sx + k - lg + 1, y, d); }
+  rect(sx - 3, y - 3, sx + 2, y - 1, b); line(sx - 3, y - 1, sx + 2, y - 1, d);
+  pline([[sx - 3, y - 3], [sx - 5, y - 4], [sx - 5, y - 6], [sx - 4, y - 7], [sx - 2, y - 7]], b); px(sx - 1, y - 6, st);
+  rect(sx + 3, y - 3, sx + 4, y - 2, b); px(sx + 5, y - 4, b); px(sx + 5, y - 2, b);
+  ctx.restore();
+}
+function drawBee(sx, y, mos) {
+  const dark = [30, 24, 20];
+  if (mos) { const b = lit([74, 74, 84]); line(sx - 3, y, sx + 2, y, b); px(sx + 3, y - 1, b); line(sx + 3, y, sx + 6, y + 1, b); line(sx - 1, y, sx - 3, y + 3, b); line(sx + 1, y, sx + 2, y + 3, b); }
+  else { ell(sx - 3, y - 2, sx + 2, y + 2, lit([244, 192, 40])); line(sx - 1, y - 2, sx - 1, y + 2, dark); line(sx + 1, y - 2, sx + 1, y + 2, dark); px(sx - 4, y, dark); px(sx + 3, y - 1, dark); }
+  const wc = mix([240, 248, 255], S.hor, 0.2);
+  if (((f / 2) | 0) % 2) { px(sx - 1, y - 3, wc); px(sx, y - 4, wc); px(sx + 1, y - 3, wc); } else { px(sx - 1, y - 3, wc); px(sx + 1, y - 3, wc); px(sx, y - 3, wc); }
+}
+function drawBuff(sx, y, dir) {
+  const b = lit([60, 56, 62]), d = lit([38, 36, 42]), hn = lit([216, 208, 192]);
+  ctx.save(); flipAt(sx, dir);
+  const lg = ((f / 8) | 0) % 2;
+  rect(sx - 9 + lg, y - 4, sx - 8 + lg, y, d); rect(sx - 5 - lg, y - 4, sx - 4 - lg, y, d); rect(sx + 3 + lg, y - 4, sx + 4 + lg, y, d); rect(sx + 7 - lg, y - 4, sx + 8 - lg, y, d);
+  ell(sx - 11, y - 13, sx + 9, y - 3, b); line(sx - 8, y - 12, sx + 5, y - 12, mul(b, 1.25));
+  ell(sx + 7, y - 12, sx + 13, y - 6, b); px(sx + 11, y - 10, [250, 240, 220]); px(sx + 13, y - 7, d);
+  pline([[sx + 8, y - 12], [sx + 6, y - 15], [sx + 3, y - 15], [sx + 2, y - 13]], hn);
+  line(sx - 11, y - 11, sx - 13, y - 6, d);
+  ctx.restore();
+}
+function fireAmt(e) { const on = e.per * 0.38; return clamp(Math.min(e.cyc / 8, (on - e.cyc) / 8), 0, 1); }
+function drawFire(e, c) {
+  const sx = Math.round(e.x - c); if (sx < -20 || sx > W + 20) return;
+  rect(sx - 3, FY - 3, sx + 3, FY + 1, lit([80, 80, 88])); rect(sx - 2, FY - 5, sx + 2, FY - 4, lit([112, 112, 120]));
+  if (e.warn) {
+    for (let k = 0; k < 3; k++) { const u = ((f + k * 9) % 24) / 24; px(sx + Math.sin(f * 0.2 + k) * 2, FY - 6 - u * 10, mix(lit([130, 130, 130]), S.hor, u)); }
+    if (((f / 4) | 0) % 2) { px(sx, FY - 6, [255, 170, 60]); glow(sx, FY - 6, 4, [255, 140, 50], 0.5); }
+  }
+  if (e.on) {
+    const hgt = 34 * fireAmt(e);
+    for (let yy = 0; yy < hgt; yy++) {
+      const u = yy / Math.max(1, hgt), w = Math.max(1, 3.5 * (1 - u * 0.7) + Math.sin(f * 0.5 + yy) * 0.8);
+      rect(sx - w, FY - 6 - yy, sx + w, FY - 6 - yy, u < 0.35 ? [255, 242, 172] : u < 0.7 ? [255, 162, 52] : [222, 72, 40]);
+    }
+    glow(sx, FY - 6 - hgt / 2, 18, [255, 140, 50], 0.55);
+  }
+}
+function drawGush(e, c) {
+  const sx = Math.round(e.x - c); if (sx < -30 || sx > W + 30) return;
+  const wood = lit([124, 86, 52]), dk = lit([82, 56, 34]), wc = mix([200, 232, 246], S.hor, 0.2);
+  rect(sx - 19, 110, sx - 18, 146, dk); rect(sx + 18, 110, sx + 19, 146, dk);
+  rect(sx - 22, 105, sx + 22, 109, wood); line(sx - 22, 110, sx + 22, 110, dk); line(sx - 22, 104, sx + 22, 104, mix(wc, wood, 0.4));
+  rect(sx - 3, 110, sx + 3, 112, dk);
+  if (e.warn && ((f / 3) | 0) % 2) px(sx, 113 + ((f / 2) % 12), wc);
+  if (e.on) {
+    rect(sx - 3, 112, sx + 3, FY, mix(wc, S.top, 0.12));
+    for (let yy = 112; yy < FY; yy += 2) if (((yy + f * 2) | 0) % 8 < 3) px(sx - 2 + ((yy >> 1) % 5), yy, [250, 252, 255]);
+    ell(sx - 8, FY - 3, sx + 8, FY + 2, wc);
+  }
+}
+
+// ---------------------------------------------------------------- platforms
+function drawPlat(p, c) {
+  const sx = Math.round(p.cx - c), l = Math.round(sx - p.w / 2), r = Math.round(sx + p.w / 2), y = FY - p.h;
+  if (r < -10 || l > W + 10) return;
+  switch (p.st) {
+    case 'crate': {
+      const wd = lit([168, 118, 68]), dk = lit([112, 74, 40]);
+      rect(l, y, r, FY, wd); rect(l, y, r, y, mul(wd, 1.2)); rect(l, FY, r, FY, dk);
+      line(l, y, l, FY, dk); line(r, y, r, FY, dk); line(l + 1, y + 1, r - 1, FY - 1, dk);
+      if (p.h > 14) line(l, y + 12, r, y + 12, dk);
+      break;
+    }
+    case 'col': {
+      const st = lit([214, 200, 172]), dk = lit([170, 154, 126]);
+      rect(l + 1, y + 3, r - 1, FY, st); for (let k = l + 3; k < r - 1; k += 3) line(k, y + 4, k, FY - 2, dk);
+      rect(l - 1, y, r + 1, y + 2, mul(st, 1.06)); line(l - 1, y + 3, r + 1, y + 3, dk); rect(l, FY - 2, r, FY, dk);
+      break;
+    }
+    case 'brick': {
+      const br = lit([188, 130, 86]), dk = lit([144, 96, 62]), li = lit([216, 164, 114]);
+      rect(l, y, r, H, br); rect(l, y, r, y, li);
+      for (let yy = y + 3, row = 0; yy < H; yy += 3, row++) { line(l, yy, r, yy, dk); for (let k = l + (row % 2 ? 2 : 5); k < r; k += 6) px(k, yy + 1, dk); }
+      line(r, y, r, H, dk);
+      break;
+    }
+    case 'stone': { const st = lit([190, 176, 150]); rect(l, y, r, y + 4, st); rect(l, y, r, y, mul(st, 1.12)); line(l, y + 5, r, y + 5, mul(st, 0.7)); break; }
+    case 'wood': {
+      const wd = lit([150, 104, 60]), dk = lit([96, 64, 36]);
+      rect(l, y, r, y + 2, wd); line(l, y + 3, r, y + 3, dk); for (let k = l + 3; k < r; k += 7) px(k, y + 1, dk);
+      if (p.mv) { const wc = mix(mix(S.top, S.hor, 0.3), [255, 255, 255], 0.35); line(l + 2, y + 5, r - 2, y + 5, wc); }
+      break;
+    }
+    case 'boat': {
+      const wd = lit([74, 52, 34]), dk = lit([34, 26, 20]);
+      poly([[l - 4, y - 3], [l + 2, y + 1], [r - 2, y + 1], [r + 4, y - 3], [r + 1, y + 4], [l - 1, y + 4]], wd);
+      line(l + 1, y + 1, r - 1, y + 1, lit([150, 110, 70])); line(l, y + 4, r, y + 4, dk);
+      const wc = mix(mix(S.top, S.hor, 0.3), [255, 255, 255], 0.45); if (Math.abs(p.dx) > 0.05) { const bx = p.dx > 0 ? l - 3 : r + 3; px(bx, y + 5, wc); px(bx + (p.dx > 0 ? -2 : 2), y + 5, wc); }
+      break;
+    }
+    case 'steel': {
+      const st = lit([72, 70, 80]), li = lit([120, 118, 130]);
+      rect(l, y, r, y + 3, st); line(l, y, r, y, li); for (let k = l + 2; k < r; k += 4) px(k, y + 2, li);
+      line(l + 2, y + 4, l + 2, FY, mul(st, 0.9)); line(r - 2, y + 4, r - 2, FY, mul(st, 0.9)); for (let yy = y + 8; yy < FY; yy += 8) line(l + 2, yy, r - 2, yy - 6, mul(st, 0.9));
+      break;
+    }
+  }
+}
+
+// ---------------------------------------------------------------- grounds, plains, pits
+const GROUNDS = {
+  sand: { edge: [176, 146, 104], base: [208, 178, 130], a: [180, 150, 104], b: [228, 202, 152] },
+  rock: { edge: [118, 94, 74], base: [150, 122, 94], a: [110, 88, 68], b: [178, 152, 122] },
+  mud: { edge: [88, 80, 56], base: [124, 110, 78], a: [92, 124, 60], b: [152, 132, 96] },
+  dirt: { edge: [128, 94, 62], base: [172, 134, 94], a: [140, 104, 70], b: [96, 124, 62] },
+  stone: { edge: [150, 140, 126], base: [190, 178, 158], a: [160, 148, 130], b: [204, 194, 176] }
+};
+function drawGroundStyle(c) {
+  if (LV.ground === 'tile') { drawGround(c); return; }
+  const G = GROUNDS[LV.ground], edge = lit(G.edge), base = lit(G.base);
+  rect(0, RIV, W, 145, edge); rect(0, RIV, W, RIV, mul(edge, 1.15)); rect(0, 146, W, H, base); rect(0, 146, W, 146, mul(base, 0.9));
+  if (LV.ground === 'stone') {
+    const gl = lit([150, 138, 122]);
+    for (const [y0, y1, off, wd] of [[146, 156, 0, 26], [156, 168, 11, 30], [168, H, 5, 24]]) {
+      rect(0, y1, W, y1, gl); const k0 = Math.floor((c - off) / wd);
+      for (let k = k0 - 1; k < k0 + W / wd + 2; k++) { const x = k * wd + off - c; rect(x, y0, x, y1, gl); }
+    }
+  } else {
+    const ca = lit(G.a), cb = lit(G.b), k0 = Math.floor(c / 5);
+    for (let k = k0 - 1; k < k0 + 68; k++) {
+      const r = hsh(k), x = k * 5 - c + ((r * 5) | 0), y = 148 + ((hsh(k * 7 + 3) * 31) | 0);
+      if (LV.ground === 'mud' && r < 0.35) { line(x, 146, x, 142 - ((r * 8) | 0), ca); continue; }
+      px(x, y, r < 0.5 ? ca : cb); if (r > 0.85) px(x + 1, y, r < 0.5 ? ca : cb);
+    }
+  }
+}
+function drawPlain(c) {
+  const P0 = LV.plain, far = mix(mix(S.hor, S.top, 0.2), lit(P0[0]), 0.55), near = lit(P0[1]), fld = lit(P0[2]);
+  for (let y = WL; y < RIV; y++) rect(0, y, W, y, mix(far, near, (y - WL) / (RIV - WL)));
+  for (let r = 0; r < 7; r++) {
+    const y = Math.round(WL + 2 + r * r * 0.7 + r * 2); if (y >= RIV - 1) break;
+    const par = 0.3 + r * 0.1, k0 = Math.floor(c * par / 18);
+    for (let k = k0 - 1; k < k0 + W / 18 + 2; k++) { if (hsh(k * 31 + r) < 0.5) { const x = k * 18 - c * par; rect(x, y, x + 5 + ((hsh(k + r * 9) * 9) | 0), y + (r > 3 ? 1 : 0), mix(mix(far, near, (y - WL) / (RIV - WL)), fld, 0.55)); } }
+  }
+}
+function drawPits(c) {
+  const G = GROUNDS[LV.ground] || GROUNDS.sand, edge = lit(G.edge);
+  for (const g of gaps) {
+    const a = Math.round(g[0] - c), b = Math.round(g[1] - c); if (b < -2 || a > W + 2) continue;
+    if (LV.pit === 'water') {
+      const wc = mix(mix(S.top, S.hor, 0.3), [18, 44, 64], 0.55);
+      rect(a, RIV, b, H, wc); rect(a, RIV, b, RIV + 3, mul(wc, 0.75));
+      const hl = mix(wc, [255, 255, 255], 0.3);
+      for (let k = 0; k < (b - a) / 5; k++) { const yy = 146 + ((hsh(k + g[0]) * 30) | 0), xx = a + 2 + ((k * 5 + f * 0.2 * (k % 2 ? 1 : -1)) % Math.max(4, b - a - 4) + (b - a)) % Math.max(4, b - a - 4); rect(xx, yy, xx + 2, yy, hl); }
+    } else if (LV.pit === 'oil') {
+      rect(a, RIV, b, H, [22, 20, 26]); rect(a, RIV, b, RIV + 2, [12, 10, 14]);
+      for (let k = 0; k < (b - a) / 6; k++) { const xx = a + 3 + k * 6 + Math.round(Math.sin(f * 0.03 + k) * 2), yy = 150 + ((hsh(k + g[0]) * 24) | 0); px(xx, yy, [90, 60, 120]); px(xx + 1, yy, [60, 110, 120]); }
+    } else {
+      rect(a, RIV, b, H, lit([72, 54, 38])); rect(a, RIV, a + 3, H, lit([56, 42, 30]));
+      for (const yy of [150, 159, 170]) line(a, yy, b, yy, lit([92, 70, 48]));
+      rect(a, H - 5, b, H, lit([46, 34, 24]));
+    }
+    rect(a - 1, RIV, a, H, mul(edge, 0.8)); rect(b, RIV, b + 1, H, mul(edge, 0.8));
+  }
+}
+
+// ---------------------------------------------------------------- props shared
+function palmsAt(list, c) { for (const [wx, h] of list) { const sx = wx - c; if (sx > -40 && sx < W + 40) drawPalm(sx, 146, h, false); } }
+function lampsAt(c) { for (const wx of LAMPS) { const sx = wx - c; if (sx > -20 && sx < W + 20) drawLamp(Math.round(sx)); } }
+function signsAt(list, c) { for (const [wx, l] of list) { const sx = wx - c; if (sx > -50 && sx < W + 50) drawSign(Math.round(sx), l); } }
+function fgPalms(c) { for (const [wx, h] of FGPALMS) { const sx = wx - c * 1.5; if (sx > -80 && sx < W + 80) drawPalm(sx, 196, h, true); } }
+
+// ---------------------------------------------------------------- 1-2 SHUSH
+function drawDaniel(sx) {
+  const wc = lit([238, 230, 208], 0.05), sh = lit([196, 184, 156], 0.1), base = WL - 1, gold = lit([240, 200, 90]);
+  rect(sx - 24, base - 7, sx - 12, base, wc); ell(sx - 22, base - 12, sx - 14, base - 3, wc);
+  rect(sx - 11, base - 12, sx + 11, base, wc); rect(sx + 6, base - 12, sx + 11, base, sh);
+  rect(sx - 2, base - 7, sx + 1, base, lit([90, 70, 56]));
+  for (let k = 0; k < 10; k++) { const hw = 9 - k * 0.85, y0 = base - 13 - k * 3; rect(sx - hw, y0 - 2, sx + hw, y0, wc); line(sx - hw, y0, sx + hw, y0, sh); }
+  line(sx, base - 46, sx, base - 43, gold); px(sx, base - 47, gold);
+}
+function drawCastle(sx) {
+  const wall = lit([206, 174, 124], 0.1), dk = lit([152, 122, 86], 0.15), base = WL - 1;
+  ell(sx - 72, base - 12, sx + 72, base + 14, mix(lit([178, 148, 106]), S.hor, 0.12));
+  const b = base - 8;
+  rect(sx - 42, b - 12, sx + 42, b, wall); for (let k = -42; k <= 40; k += 4) rect(sx + k, b - 14, sx + k + 1, b - 13, wall);
+  for (const tx of [-47, 41]) { rect(sx + tx, b - 18, sx + tx + 6, b, wall); for (let k = 0; k < 7; k += 3) rect(sx + tx + k, b - 20, sx + tx + k + 1, b - 19, wall); }
+  rect(sx - 8, b - 27, sx + 10, b, wall); for (let k = -8; k <= 9; k += 3) rect(sx + k, b - 29, sx + k + 1, b - 28, wall);
+  rect(sx + 6, b - 27, sx + 10, b, dk); for (const wx of [-4, 1]) rect(sx + wx, b - 21, sx + wx + 1, b - 18, dk);
+  rect(sx - 2, b - 6, sx + 2, b, dk); for (let k = -38; k < 38; k += 9) px(sx + k, b - 7, dk);
+}
+function farShush(c) {
+  mounds(c, 0.12, WL, hazeC(0.3, [140, 110, 80]), 7, 0.018, 1);
+  const s1 = 250 - c * 0.4; if (s1 > -40 && s1 < W + 40) drawDaniel(s1);
+  const s2 = 720 - c * 0.4; if (s2 > -90 && s2 < W + 90) drawCastle(s2);
+  const pc = hazeC(0.5, [34, 44, 30]);
+  FARPALMS.forEach((x, i) => { const sx = x - c * 0.5; if (i % 3 === 0 && sx > -10 && sx < W + 10) smallPalm(sx, WL - 1, 8 + i % 4, pc); });
+}
+function propsShush(c) {
+  palmsAt(PALMS.filter((_, i) => i % 2 === 0), c);
+  for (const wx of [300, 640, 1020, 1380, 1700]) { const sx = Math.round(wx - c); if (sx < -20 || sx > W + 20) continue; const st = lit([206, 190, 160]); rect(sx - 5, 138, sx + 5, 146, st); for (let k = sx - 3; k < sx + 5; k += 3) line(k, 139, k, 145, lit([168, 152, 124])); rect(sx - 6, 137, sx + 6, 138, lit([222, 208, 182])); }
+  signsAt([[140, 'SHUSH'], [980, 'APADANA']], c);
+}
+
+// ---------------------------------------------------------------- 1-3 CHOGHA ZANBIL
+function drawZig(sx) {
+  const base = WL - 1, br = lit([188, 130, 86], 0.08), dk = lit([150, 98, 62], 0.12), li = lit([216, 162, 112], 0.05);
+  let y = base;
+  for (const [hw, h] of [[76, 10], [58, 10], [41, 10], [25, 9]]) {
+    rect(sx - hw, y - h, sx + hw, y, br); rect(sx + hw * 0.55, y - h, sx + hw, y, dk);
+    for (let yy = y - h + 2; yy < y; yy += 3) line(sx - hw, yy, sx + hw, yy, mul(br, 0.93));
+    line(sx - hw, y - h, sx + hw, y - h, li); y -= h;
+  }
+  rect(sx - 10, y - 6, sx + 10, y, br); line(sx - 10, y - 6, sx + 10, y - 6, li);
+  rect(sx - 4, y, sx + 4, base, li); for (let yy = y + 2; yy < base; yy += 2) line(sx - 4, yy, sx + 4, yy, mul(li, 0.9));
+  rect(sx - 2, base - 5, sx + 2, base, lit([72, 46, 30]));
+}
+function farChogha(c) {
+  mounds(c, 0.08, WL, hazeC(0.3, [170, 128, 90]), 5, 0.012, 2);
+  const sx = 560 - c * 0.35; if (sx > -90 && sx < W + 90) drawZig(sx);
+}
+function propsChogha(c) {
+  const k0 = Math.floor(c / 40);
+  for (let k = k0 - 1; k < k0 + 10; k++) {
+    const r = hsh(k * 13), sx = Math.round(k * 40 + r * 30 - c); if (r > 0.6) continue;
+    const g = lit([110, 118, 70]); for (let j = -3; j <= 3; j++) line(sx, 146, sx + j * 1.5, 139 + Math.abs(j), g);
+  }
+  for (const wx of [260, 900, 1320]) { const sx = Math.round(wx - c); if (sx < -20 || sx > W + 20) continue; const br = lit([186, 128, 84]); rect(sx - 6, 142, sx + 1, 145, br); rect(sx - 2, 139, sx + 5, 142, mul(br, 0.9)); rect(sx + 3, 142, sx + 8, 145, mul(br, 1.05)); }
+  signsAt([[140, 'CHOGHA ZANBIL'], [1560, 'ELAM']], c);
+}
+
+// ---------------------------------------------------------------- 1-4 DEZFUL
+function drawOldBridge(x0) {
+  const L = 640, spans = 16, span = L / spans, deck = 90; if (x0 > W + 8 || x0 + L < -8) return;
+  const st = lit([198, 160, 118], 0.1), dk = lit([150, 116, 84], 0.18);
+  rect(Math.max(0, x0), deck - 2, Math.min(W, x0 + L), deck + 3, st); line(Math.max(0, x0), deck - 2, Math.min(W, x0 + L), deck - 2, mul(st, 1.1));
+  for (let i = 0; i < spans; i++) {
+    const a = x0 + i * span; if (a > W || a + span < 0) continue;
+    for (let x = Math.max(0, Math.floor(a + 3)); x <= Math.min(W - 1, a + span - 3); x++) { const u = clamp((x - a - 3) / (span - 6), 0, 1); rect(x, deck + 3, x, deck + 4 + (1 - Math.sin(Math.PI * u)) * 9, st); }
+  }
+  for (let i = 0; i <= spans; i++) { const p = x0 + i * span; if (p < -8 || p > W + 8) continue; rect(p - 3, deck, p + 3, WL, st); rect(p - 3, WL - 4, p + 3, WL, dk); rect(p - 1, deck + 3, p, deck + 6, dk); }
+}
+function drawMill(sx, y) {
+  ell(sx - 14, y - 3, sx + 14, y + 5, lit([98, 92, 86])); rect(sx - 9, y - 12, sx + 9, y - 1, lit([216, 192, 152])); rect(sx + 4, y - 12, sx + 9, y - 1, lit([180, 156, 120]));
+  rect(sx - 10, y - 13, sx + 10, y - 12, lit([164, 132, 100])); ell(sx - 6, y - 8, sx - 2, y + 1, lit([60, 44, 36])); ell(sx + 1, y - 8, sx + 5, y + 1, lit([60, 44, 36]));
+  const wc = mix([240, 248, 250], S.hor, 0.2); for (let k = 0; k < 6; k++) px(sx - 8 + k * 3 + ((f / 6 + k) | 0) % 2, y + 4 + (k % 2), wc);
+}
+function farDezful(c) {
+  const base = hazeC(0.35, [124, 82, 60]);
+  for (const b of BUILD) {
+    const sx = Math.round(b.x * 0.9 - c * 0.2); if (sx > W || sx + b.w < 0) continue;
+    const h = Math.min(b.h, 16), top = WL - 4 - h, col = mul(base, 1 + b.shade);
+    if (b.kind === 'dome') { rect(sx, top, sx + b.w, WL - 4, col); ell(sx + 1, top - b.w / 2, sx + b.w - 1, top + b.w / 2, col); }
+    else if (b.kind === 'tower') { poly([[sx - 3, top], [sx + 7, top], [sx + 2, top - 14]], col); rect(sx - 3, top, sx + 7, WL - 4, col); }
+    else { rect(sx, top, sx + b.w, WL - 4, col); for (const [wx, wy, th] of b.wins) if (S.dusk > th * 0.9 + 0.08 && wy < h) px(sx + wx, top + wy, [255, 206, 120]); }
+  }
+  rect(0, WL - 4, W, WL - 1, base);
+  drawOldBridge(160 - c * 0.5);
+}
+function midDezful(c) { for (const wx of [150, 430, 760, 1100, 1450, 1800]) { const sx = wx - c * 0.8; if (sx > -30 && sx < W + 30) drawMill(Math.round(sx), 126); } }
+function drawOrange(sx) {
+  sx = Math.round(sx); const tr = lit([96, 70, 44]), lf = lit([40, 96, 50]), lf2 = lit([60, 120, 60]);
+  rect(sx, 132, sx + 1, 146, tr); ell(sx - 9, 116, sx + 10, 134, lf); ell(sx - 5, 118, sx + 5, 128, lf2);
+  for (let k = 0; k < 9; k++) { const r = hsh(k + sx * 3 + 7); px(sx - 7 + ((r * 15) | 0), 119 + ((hsh(k * 5 + 2) * 12) | 0), k % 3 ? lit([252, 250, 240]) : lit([240, 150, 40])); }
+}
+function propsDezful(c) {
+  for (const wx of [100, 300, 560, 700, 980, 1240, 1520, 1720]) { const sx = wx - c; if (sx > -20 && sx < W + 20 && groundAt(wx)) drawOrange(sx); }
+  lampsAt(c); signsAt([[140, 'DEZFUL'], [1000, 'DEZ RIVER']], c);
+}
+
+// ---------------------------------------------------------------- 1-5 SHUSHTAR
+function cliffY(wx) { return WL - 34 + Math.sin(wx * 0.05) * 3 + Math.sin(wx * 0.013) * 5; }
+function farShushtar(c) {
+  const rock = lit([188, 152, 108], 0.1), dk = lit([146, 110, 76], 0.15);
+  for (let k = 0; k < 60; k++) { const wx = k * 30, sx = wx - c * 0.45; if (sx < -24 || sx > W + 24) continue; const hh = 6 + ((hsh(k) * 8) | 0), w = 10 + ((hsh(k + 50) * 8) | 0), cy = cliffY(wx); rect(sx, cy - hh, sx + w, cy, lit([208, 180, 134], 0.1)); if (hsh(k + 3) < 0.25) ell(sx + 2, cy - hh - 4, sx + 8, cy - hh + 2, lit([208, 180, 134], 0.1)); if (S.dusk > 0.3 && hsh(k + 9) < 0.6) px(sx + 3, cy - hh + 3, [255, 206, 120]); }
+  for (let x = 0; x < W; x++) { const wx = x + c * 0.45; rect(x, cliffY(wx), x, WL - 1, hsh(wx | 0) < 0.08 ? dk : rock); }
+  const wcol = mix([236, 246, 250], S.hor, 0.25);
+  for (let wx = 150; wx < 1100; wx += 32) {
+    const sx = Math.round(wx - c * 0.45); if (sx < -10 || sx > W + 10) continue;
+    const oy = WL - 24 + ((hsh(wx) * 8) | 0);
+    ell(sx - 4, oy - 5, sx + 4, oy + 2, lit([62, 46, 36]));
+    rect(sx - 1, oy, sx + 1, WL - 1, mix(wcol, S.top, 0.1));
+    for (let y = oy; y < WL; y += 2) if (((y + f / 2) | 0) % 6 < 2) px(sx + ((y >> 1) % 2 ? 1 : -1), y, wcol);
+    ell(sx - 4, WL - 3, sx + 4, WL + 1, wcol);
+  }
+}
+function propsShushtar(c) { signsAt([[140, 'SHUSHTAR'], [1300, 'BAND-E KAISAR']], c); palmsAt(PALMS.filter((_, i) => i % 3 === 1), c); }
+
+// ---------------------------------------------------------------- 1-6 MASJED SOLEYMAN
+function drawDerrick(sx, base, col) {
+  const hgt = 46; line(sx - 7, base, sx - 1, base - hgt, col); line(sx + 7, base, sx + 1, base - hgt, col);
+  for (let y = 7; y <= hgt; y += 7) { const a0 = 7 - 6 * (y - 7) / hgt, a1 = 7 - 6 * y / hgt; line(sx - a0, base - y + 7, sx + a1, base - y, col); line(sx + a0, base - y + 7, sx - a1, base - y, col); line(sx - a1, base - y, sx + a1, base - y, col); }
+  rect(sx - 2, base - hgt - 3, sx + 2, base - hgt, col);
+}
+function drawFlare(sx, base, col) {
+  rect(sx, base - 32, sx + 1, base, col);
+  for (let i = 0; i < 7; i++) { const r = hsh(((f / 3) | 0) * 7 + i + sx); px(sx + Math.round((r - 0.5) * 3), base - 33 - i, i < 2 ? [255, 240, 170] : i < 5 ? [255, 160, 50] : [220, 80, 40]); }
+  glow(sx, base - 36, 12, [255, 150, 60], 0.6);
+}
+function drawTent(sx, base, col) { poly([[sx - 16, base], [sx - 13, base - 7], [sx - 4, base - 9], [sx, base - 7], [sx + 5, base - 9], [sx + 13, base - 7], [sx + 16, base]], col); rect(sx - 3, base - 5, sx + 2, base, mul(col, 0.6)); }
+function farMIS(c) {
+  mountains(c, 0.08, WL - 2, hazeC(0.4, [74, 62, 74]), 38, 0.012, 1);
+  mountains(c, 0.16, WL - 1, hazeC(0.3, [96, 74, 62]), 22, 0.02, 3);
+  const col = hazeC(0.45, [34, 28, 34]);
+  for (const wx of [200, 540, 880, 1220]) { const sx = wx - c * 0.5; if (sx > -12 && sx < W + 12) drawDerrick(Math.round(sx), WL - 1, col); }
+  for (const wx of [370, 710, 1050]) { const sx = wx - c * 0.5; if (sx > -12 && sx < W + 12) drawFlare(Math.round(sx), WL - 1, col); }
+  for (const wx of [280, 620, 960, 1300]) { const sx = wx - c * 0.6; if (sx > -20 && sx < W + 20) drawTent(Math.round(sx), WL - 1, mix(col, [20, 16, 16], 0.4)); }
+}
+function drawPumpjack(sx, base) {
+  const iron = lit([56, 54, 62]), hd = lit([200, 90, 50]), a = Math.sin(f * 0.04) * 0.28;
+  rect(sx - 10, base - 2, sx + 12, base, iron); line(sx - 4, base, sx, base - 14, iron, 2); line(sx + 4, base, sx, base - 14, iron, 2);
+  const ex = Math.cos(a) * 13, ey = Math.sin(a) * 13;
+  line(sx - ex, base - 14 - ey, sx + ex, base - 14 + ey, iron, 2);
+  rect(sx + ex - 1, base - 17 + ey, sx + ex + 3, base - 11 + ey, hd);
+  line(sx + ex + 2, base - 11 + ey, sx + ex + 2, base, iron);
+  rect(sx - ex - 3, base - 16 - ey, sx - ex + 1, base - 11 - ey, iron);
+}
+function propsMIS(c) {
+  const pipe = lit([96, 94, 104]); rect(0, 141, W, 142, pipe); const k0 = Math.floor(c / 40); for (let k = k0; k < k0 + 10; k++) { const x = k * 40 - c; rect(x, 143, x + 1, 145, mul(pipe, 0.7)); }
+  for (const wx of [340, 1000, 1580]) { const sx = wx - c; if (sx > -30 && sx < W + 30) drawPumpjack(Math.round(sx), 146); }
+  signsAt([[140, 'MASJED SOLEYMAN'], [880, 'WELL NO.1']], c);
+}
+
+// ---------------------------------------------------------------- 1-7 HOOR AL-AZIM
+function drawMudhif(sx) {
+  const base = WL - 1, col = lit([204, 168, 104], 0.1), dk = lit([150, 116, 64], 0.15);
+  ell(sx - 34, base - 20, sx + 34, base + 20, col);
+  for (let k = -30; k <= 30; k += 5) { const t = base - 20 * Math.sqrt(Math.max(0, 1 - (k / 34) * (k / 34))); line(sx + k, t + 1, sx + k, base, dk); }
+  for (const e of [-38, 35]) { rect(sx + e, base - 24, sx + e + 3, base, col); px(sx + e + 1, base - 25, col); px(sx + e + 2, base - 26, col); line(sx + e + 1, base - 22, sx + e + 1, base, dk); }
+  ell(sx - 3, base - 8, sx + 3, base + 4, lit([60, 44, 30]));
+}
+function drawBuffHead(sx, y) { const b = lit([52, 50, 56]), hn = lit([214, 206, 190]); ell(sx - 4, y - 3, sx + 4, y + 2, b); pline([[sx - 3, y - 3], [sx - 6, y - 5], [sx - 7, y - 3]], hn); pline([[sx + 3, y - 3], [sx + 6, y - 5], [sx + 7, y - 3]], hn); line(sx - 6, y + 2, sx + 6, y + 2, mix(mix(S.top, S.hor, 0.4), [255, 255, 255], 0.4)); }
+function farHoor(c) {
+  const col = hazeC(0.4, [62, 72, 42]);
+  for (let x = 0; x < W; x++) { const wx = (x + c * 0.25) | 0; if (hsh(wx * 3) < 0.7) { const h = 2 + ((hsh(wx) * 6) | 0); rect(x, WL - 1 - h, x, WL - 1, col); } }
+  const sx = 420 - c * 0.4; if (sx > -60 && sx < W + 60) drawMudhif(Math.round(sx));
+}
+function midHoor(c) {
+  for (const [wx, y] of [[200, 112], [520, 118], [900, 110], [1300, 116], [1700, 112]]) { const sx = wx - c * 0.7; if (sx > -10 && sx < W + 10) drawBuffHead(Math.round(sx), Math.round(y + Math.sin(f * 0.03 + wx) * 0.8)); }
+  const bx = ((f * 0.25) % 1800) - 100 - c * 0.5, by = 124; if (bx > -30 && bx < W + 30) { const wd = lit([60, 44, 30]); poly([[bx - 14, by - 3], [bx - 10, by], [bx + 10, by], [bx + 14, by - 3], [bx + 11, by + 2], [bx - 11, by + 2]], wd); rect(bx - 2, by - 8, bx, by - 1, lit([40, 36, 40])); line(bx + 1, by - 7, bx + 8, by + 3, lit([150, 120, 80])); }
+}
+function reedClump(sx, base, h, col, tip) {
+  for (let j = -3; j <= 3; j++) { const sway = Math.sin(f * 0.03 + sx * 0.1 + j) * 1.5; line(sx + j, base, sx + j * 1.6 + sway, base - h + Math.abs(j) * 2, col); px(sx + j * 1.6 + sway, base - h + Math.abs(j) * 2 - 1, tip); }
+}
+function propsHoor(c) {
+  const col = lit([96, 124, 56]), tip = lit([150, 110, 60]);
+  const k0 = Math.floor(c / 22); for (let k = k0 - 1; k < k0 + 17; k++) { const wx = k * 22 + ((hsh(k) * 10) | 0); if (!groundAt(wx) || hsh(k * 5) < 0.3) continue; reedClump(Math.round(wx - c), 146, 12 + ((hsh(k * 9) * 12) | 0), col, tip); }
+  signsAt([[140, 'HOOR AL-AZIM']], c);
+}
+function fgReeds(c) { const col = mix(lit([40, 60, 30]), [8, 12, 8], 0.4); const k0 = Math.floor(c * 1.4 / 60); for (let k = k0 - 1; k < k0 + 8; k++) { if (hsh(k * 17) < 0.45) continue; const sx = Math.round(k * 60 - c * 1.4); reedClump(sx, 186, 30 + ((hsh(k) * 16) | 0), col, col); } }
+
+// ---------------------------------------------------------------- 1-8 KHORRAMSHAHR & ABADAN
+function drawRefinery(sx, base, col) {
+  for (const [dx, w, h] of [[0, 3, 28], [10, 5, 18], [18, 3, 34], [30, 7, 14], [44, 3, 24], [60, 4, 30], [74, 8, 12], [90, 3, 36]]) rect(sx + dx, base - h, sx + dx + w, base, col);
+  ell(sx + 100, base - 10, sx + 112, base, col); ell(sx - 16, base - 9, sx - 4, base, col);
+  line(sx - 16, base - 6, sx + 112, base - 6, col);
+  for (const dx of [18, 90]) { const tx = sx + dx + 1, ty = base - (dx === 18 ? 34 : 36); for (let i = 0; i < 5; i++) { const r = hsh(((f / 3) | 0) * 5 + i + dx); px(tx + Math.round((r - 0.5) * 3), ty - 1 - i, i < 2 ? [255, 236, 160] : [255, 140, 50]); } glow(tx, ty - 3, 12, [255, 150, 60], 0.6); }
+  if (S.dusk > 0.3) for (let k = 0; k < 18; k++) { const r = hsh(k * 11); if (((f / 20 + k) | 0) % 5) px(sx - 10 + ((r * 120) | 0), base - 2 - ((hsh(k * 3) * 16) | 0), k % 4 ? [255, 214, 130] : [255, 70, 60]); }
+}
+function drawMosque(sx, base) {
+  const wc = lit([232, 222, 200], 0.06), sh = lit([196, 184, 160], 0.1), dm = lit([74, 160, 170], 0.05), gold = lit([240, 200, 90]);
+  ell(sx - 9, base - 25, sx + 9, base - 7, dm); line(sx - 6, base - 22, sx - 2, base - 24, mix(dm, [255, 255, 255], 0.3));
+  line(sx, base - 29, sx, base - 25, gold);
+  rect(sx - 13, base - 12, sx + 13, base, wc); rect(sx + 8, base - 12, sx + 13, base, sh);
+  for (const k of [-9, -3, 3]) rect(sx + k, base - 9, sx + k + 2, base - 3, S.dusk > 0.4 ? [255, 206, 120] : sh);
+  rect(sx + 17, base - 42, sx + 20, base, wc); rect(sx + 16, base - 34, sx + 21, base - 33, sh); rect(sx + 17, base - 44, sx + 20, base - 43, dm); px(sx + 18, base - 46, gold);
+  if (S.dusk > 0.4) { glow(sx, base - 16, 18, [120, 220, 220], 0.25); px(sx + 18, base - 35, [180, 255, 220]); }
+}
+function farArvand(c) {
+  drawRefinery(Math.round(430 - c * 0.25), WL - 3, hazeC(0.4, [24, 22, 38]));
+  drawFarBank(c);
+  const sx = 400 - c * 0.5; if (sx > -30 && sx < W + 30) drawMosque(Math.round(sx), WL - 4);
+}
+function propsArvand(c) { palmsAt(PALMS2, c); lampsAt(c); signsAt([[140, 'KHORRAMSHAHR'], [880, 'ARVAND'], [1560, 'ABADAN']], c); }
+
+// ---------------------------------------------------------------- 1-1 AHWAZ (original scene)
+function farAhwaz(c) { drawSkyline(c); drawFarBank(c); drawWhiteBridge(c); drawBlackBridge(c); }
+function midAhwaz(c) { drawBoat(c); drawRailing(c); }
+function propsAhwaz(c) {
+  for (const p of prints) { const sx = p.x - c; if (sx > -4 && sx < W + 4) rect(sx - 1, 168 + p.side, sx + 1, 168 + p.side, mix(lit([150, 126, 94]), lit([202, 178, 138]), (f - p.t) / 300)); }
+  palmsAt(PALMS, c); lampsAt(c); signsAt(SIGNS, c);
+  if (Math.abs(STALL - c - W / 2) < W) drawStall(Math.round(STALL - c));
+  for (const wx of BENCHES) { const sx = wx - c; if (sx > -20 && sx < W + 20) drawBench(sx); }
+  for (const p of PUDDLES) { const sx = p.x - c; if (sx > -30 && sx < W + 30) drawPuddle(p, sx); }
+}
+const PALMS2 = [[60, 52], [240, 56], [420, 46], [560, 58], [760, 50], [960, 54], [1100, 48], [1300, 56], [1520, 50], [1700, 54], [1880, 52], [2020, 50]];
+
+// ================================================================ CAST
+const CHARS = [
+  { id: 'arab', name: 'حمید', eth: 'عرب اهوازی', perk: '۴ جان به جای ۳', bio: 'بچه‌ی کوت عبدالله؛ کنار کارون بزرگ شده و هیچ‌وقت کم نمیاره.',
+    O: { body: 'robe', top: [240, 238, 230], head: 'keff', hc: [240, 238, 230], hc2: [204, 40, 46] } },
+  { id: 'bakh', name: 'نرگس', eth: 'بختیاری', perk: 'پرش بلندتر', bio: 'از ایل بختیاری؛ بهارها با خانواده کوچ می‌کنه و از هیچ صخره‌ای نمی‌ترسه.',
+    O: { body: 'skirt', top: [40, 96, 70], bot: [200, 52, 62], skirt2: [240, 190, 70], head: 'veil', hc: [240, 232, 214], hc2: [230, 180, 60] } },
+  { id: 'lor', name: 'کیان', eth: 'لر', perk: 'دویدن سریع‌تر', bio: 'اهل اندیمشک؛ کوه‌پیما و دونده، همیشه یه قدم جلوتر.',
+    O: { body: 'pants', top: [76, 70, 82], bot: [34, 30, 38], belt: [190, 150, 70], head: 'felt', hc: [54, 40, 32] } },
+  { id: 'dez', name: 'سارا', eth: 'دزفولی', perk: '۲۰ ثانیه وقت بیشتر در هر مرحله', bio: 'دانشجوی تاریخ از دزفول؛ با حوصله و دقیق، هیچ گوشه‌ای رو نادیده نمی‌گیره.',
+    O: { body: 'robe', top: [60, 120, 170], head: 'scarf', hc: [236, 196, 80], hc2: [200, 70, 60] } },
+  { id: 'shu', name: 'مهدی', eth: 'شوشتری', perk: 'پرش دوبل در هوا', bio: 'مهندس آب از شوشتر؛ مثل آبشارهای شهرش همیشه راهی پیدا می‌کنه.',
+    O: { body: 'pants', top: [226, 216, 194], bot: [86, 72, 60], vest: [122, 82, 50], head: 'cap', hc: [40, 92, 112], hc2: [240, 200, 90] } },
+  { id: 'man', name: 'یاسمین', eth: 'صابئی مندایی', perk: 'خوراکی‌ها از دور جذبش می‌شن', bio: 'از خانواده‌ای زرگر در اهواز؛ چشمش هیچ برق کوچیکی رو از دست نمی‌ده.',
+    O: { body: 'robe', top: [244, 242, 236], belt: [214, 190, 130], head: 'scarf', hc: [244, 242, 236] } }
+];
+
+// ================================================================ LEVELS
+const LEVELS = [
+  { id: 'karun', code: 'AHWAZ', num: '1-1', name: 'KARUN RIVERSIDE', fa: 'کنار کارون', city: 'اهواز', len: END, time: 60, tod: [0, 1], key: 1,
+    water: true, ground: 'tile', city2: true, lamps: true, item: 'date', itemFa: 'خرما', hi: 'HALA!',
+    far: farAhwaz, mid: midAhwaz, props: propsAhwaz, fg: fgPalms,
+    plats: [[620, 14, 12, 'crate', 0, 1], [1250, 14, 12, 'crate', 0, 1], [1264, 14, 24, 'crate', 0, 1]], en: [], gaps: [],
+    guide: { name: 'جاسم', eth: 'عرب اهوازی · بلم‌ران', O: { body: 'robe', top: [232, 228, 218], head: 'keff', hc: [236, 232, 222], hc2: [40, 40, 44], beard: [70, 56, 48] },
+      lines: ['هلا بیک! من جاسمم، سی ساله روی کارون بلم می‌رونم.', 'از پل سفید تا پل سیاه قدم بزن، خرماها رو جمع کن و کبوترها رو بپرون.', 'جعبه‌های خرما سر راهن؛ ازشون بپر. قبل از تموم شدن وقت به پرچم برس!'],
+      win: 'عفیه! کارون امروز حسابی بهت خوش گذشت.' },
+    fact: 'پل سفید اهواز سال ۱۳۱۵ ساخته شد و نماد شهر است. پل سیاه کنارش، پل راه‌آهن است.', souv: { e: '☕', n: 'فنجان گهوه‌ی عربی' } },
+
+  { id: 'shush', code: 'SHUSH', num: '1-2', name: 'ANCIENT SUSA', fa: 'شوش و آرامگاه دانیال', city: 'شوش', len: 1800, time: 75, tod: [0.05, 0.4], key: 1.06,
+    water: false, plain: [[170, 140, 100], [198, 166, 120], [110, 140, 70]], ground: 'sand', pit: 'trench', item: 'shard', itemFa: 'تکه‌سفال', hi: 'SALAM!',
+    far: farShush, props: propsShush, fg: fgPalms,
+    gaps: [[520, 556], [1100, 1140], [1480, 1515]],
+    plats: [[440, 12, 16, 'col', 0, 1], [700, 12, 18, 'col', 0, 1], [740, 12, 32, 'col', 0, 1], [780, 12, 18, 'col', 0, 1], [1300, 30, 26, 'stone']],
+    en: [{ t: 'scorp', x: 380, r: 30, s: 0.35 }, { t: 'scorp', x: 900, r: 40, s: 0.4 }, { t: 'scorp', x: 1220, r: 30, s: 0.45 }, { t: 'scorp', x: 1620, r: 30, s: 0.5 }],
+    guide: { name: 'دکتر پروین', eth: 'شوشی · باستان‌شناس', O: { body: 'pants', top: [222, 212, 182], bot: [150, 130, 90], head: 'hat', hc: [192, 162, 112], hc2: [120, 80, 50] },
+      lines: ['سلام! به شوش خوش اومدی؛ یکی از قدیمی‌ترین شهرهای دنیا.', 'اون گنبد مخروطی آرامگاه دانیال نبیه و قلعه‌ی روی تپه رو باستان‌شناس‌های فرانسوی ساختن.', 'تکه‌سفال‌های کاوش رو جمع کن. تو ترانشه‌ها نیفتی و عقرب‌ها رو از بالا له کن!'],
+      win: 'آفرین! شوش به کاشف‌هایی مثل تو افتخار می‌کنه.' },
+    fact: 'شوش پایتخت ایلام و بعدها یکی از پایتخت‌های هخامنشیان بود و سال ۱۳۹۴ در فهرست میراث جهانی یونسکو ثبت شد.', souv: { e: '🏺', n: 'سفال منقوش شوش' } },
+
+  { id: 'choga', code: 'CHOGHA', num: '1-3', name: 'CHOGHA ZANBIL', fa: 'زیگورات چغازنبیل', city: 'نزدیک شوش', len: 1760, time: 75, tod: [0.3, 0.55], key: 0.94,
+    water: false, plain: [[176, 136, 96], [204, 170, 124], [150, 130, 80]], ground: 'sand', pit: 'trench', item: 'brick', itemFa: 'آجر نوشته‌دار', hi: 'DOROOD!',
+    far: farChogha, props: propsChogha,
+    gaps: [[548, 732], [1200, 1236], [1390, 1500]],
+    plats: [[560, 24, 12, 'brick', 0, 1], [584, 24, 24, 'brick', 0, 1], [608, 24, 36, 'brick', 0, 1], [640, 40, 48, 'brick', 0, 1], [672, 24, 36, 'brick', 0, 1], [696, 24, 24, 'brick', 0, 1], [720, 24, 12, 'brick', 0, 1], [1420, 24, 16, 'stone'], [1470, 24, 22, 'stone']],
+    en: [{ t: 'scorp', x: 400, r: 40, s: 0.4 }, { t: 'scorp', x: 900, r: 40, s: 0.45 }, { t: 'bee', x: 1020, r: 40, h: 24, s: 0.5 }, { t: 'scorp', x: 1300, r: 40, s: 0.5 }, { t: 'bee', x: 1620, r: 40, h: 20, s: 0.55 }],
+    guide: { name: 'عمو کرم', eth: 'لر · نگهبان محوطه', O: { body: 'pants', top: [84, 74, 64], bot: [32, 30, 34], belt: [176, 44, 44], head: 'felt', hc: [48, 36, 30], beard: [206, 204, 200] },
+      lines: ['درود! من کرمم، بچه‌ی همین دشت؛ سال‌هاست نگهبان این زیگوراتم.', 'اینو اونتاش‌ناپیریشا، پادشاه ایلام، حدود ۳۲۰۰ سال پیش ساخت. روی آجرهاش خط میخی نوشته شده.', 'از پله‌های آجری بالا برو؛ زیرش ترانشه‌ی عمیقه. آجرهای نوشته‌دار رو جمع کن.'],
+      win: 'آجرها رازشون رو بهت گفتن، دمت گرم.' },
+    fact: 'چغازنبیل اولین اثر ایرانی بود که سال ۱۳۵۸ در فهرست میراث جهانی یونسکو ثبت شد.', souv: { e: '🧱', n: 'آجر نوشته‌دار ایلامی' } },
+
+  { id: 'dezful', code: 'DEZFUL', num: '1-4', name: 'OLD BRIDGE OF DEZFUL', fa: 'پل قدیم دزفول', city: 'دزفول', len: 1800, time: 75, tod: [0.15, 0.5], key: 1.12,
+    water: true, ground: 'stone', pit: 'water', city2: true, lamps: true, item: 'blossom', itemFa: 'شکوفه‌ی بهارنارنج', hi: 'SALAM!',
+    far: farDezful, mid: midDezful, props: propsDezful,
+    gaps: [[420, 452], [760, 796], [1080, 1116], [1380, 1420]],
+    plats: [[1400, 14, 8, 'wood'], [900, 30, 24, 'wood']],
+    en: [{ t: 'bee', x: 600, r: 40, h: 20, s: 0.5 }, { t: 'bee', x: 950, r: 30, h: 26, s: 0.55 }, { t: 'bee', x: 1250, r: 40, h: 18, s: 0.6 }, { t: 'scorp', x: 1560, r: 30, s: 0.5 }],
+    guide: { name: 'بی‌بی گلنار', eth: 'دزفولی · قصه‌گوی محله', O: { body: 'robe', top: [34, 28, 34], head: 'chador', hc: [34, 28, 34] },
+      lines: ['سلام عزیزم، به دزفول خوش اومدی! بوی بهارنارنج رو حس می‌کنی؟', 'اون پل قدیم دزفوله، یادگار دوره‌ی ساسانی؛ بیش از هزار و هفتصد ساله روی رود دز ایستاده.', 'کنار رود، آسیاب‌های آبی قدیمی هنوز سر پان. شکوفه‌ها رو جمع کن و مواظب زنبورها باش!'],
+      win: 'قربونت برم! دزفول همیشه منتظرته.' },
+    fact: 'به دزفول «شهر آجر» هم می‌گویند؛ آجرکاری خانه‌های قدیمی‌اش مشهور است.', souv: { e: '🍊', n: 'عرق بهارنارنج دزفول' } },
+
+  { id: 'shushtar', code: 'SHUSHTAR', num: '1-5', name: 'SHUSHTAR WATER SYSTEM', fa: 'آبشارها و آسیاب‌های شوشتر', city: 'شوشتر', len: 1800, time: 80, tod: [0.1, 0.45], key: 1.0,
+    water: true, ground: 'stone', pit: 'water', item: 'wheat', itemFa: 'خوشه‌ی گندم', hi: 'SALAM!',
+    far: farShushtar, props: propsShushtar,
+    gaps: [[540, 620], [1150, 1230]],
+    plats: [[580, 24, 14, 'wood', { amp: 26, spd: 0.02 }], [1190, 24, 18, 'wood', { amp: 26, spd: 0.025, ph: 1 }], [860, 24, 22, 'stone']],
+    en: [{ t: 'gush', x: 380, per: 150 }, { t: 'gush', x: 720, per: 140, off: 40 }, { t: 'gush', x: 1000, per: 150, off: 70 }, { t: 'gush', x: 1440, per: 130 }, { t: 'scorp', x: 1320, r: 30, s: 0.5 }, { t: 'bee', x: 1620, r: 40, h: 22, s: 0.6 }],
+    guide: { name: 'کاکا رضا', eth: 'شوشتری · آسیابان', O: { body: 'pants', top: [230, 224, 208], bot: [70, 80, 100], head: 'cap', hc: [238, 236, 226], beard: [90, 76, 64] },
+      lines: ['سلام! به شوشتر خوش اومدی، شهر آب و آسیاب.', 'این سازه‌های آبی از دوره‌ی ساسانی مونده؛ آب از کانال‌ها به آسیاب‌ها می‌رسه و از صخره پایین می‌ریزه.', 'وقتی ناودون‌ها آب می‌ریزن زیرشون نرو! با تخته‌های شناور از آب رد شو و خوشه‌های گندم رو جمع کن.'],
+      win: 'آسیاب‌ها به خاطر تو دوباره می‌چرخن!' },
+    fact: 'سازه‌های آبی تاریخی شوشتر سال ۱۳۸۸ در فهرست میراث جهانی یونسکو ثبت شد.', souv: { e: '⚙️', n: 'سنگ آسیاب کوچک' } },
+
+  { id: 'mis', code: 'MIS', num: '1-6', name: 'MASJED SOLEYMAN OIL FIELD', fa: 'میدان نفت مسجدسلیمان', city: 'مسجدسلیمان', len: 1900, time: 80, tod: [0.45, 0.8], key: 0.89,
+    water: false, plain: [[120, 96, 80], [150, 120, 92], [110, 104, 70]], ground: 'rock', pit: 'oil', item: 'drop', itemFa: 'قطره‌ی نفت', hi: 'DOROOD!',
+    far: farMIS, props: propsMIS,
+    gaps: [[600, 636], [1300, 1340]],
+    plats: [[960, 30, 24, 'steel'], [1010, 30, 40, 'steel'], [1650, 30, 26, 'steel']],
+    en: [{ t: 'fire', x: 420, per: 160 }, { t: 'fire', x: 780, per: 150, off: 50 }, { t: 'fire', x: 1130, per: 160, off: 90 }, { t: 'fire', x: 1500, per: 140, off: 20 },
+      { t: 'scorp', x: 500, r: 30, s: 0.45 }, { t: 'scorp', x: 880, r: 40, s: 0.5 }, { t: 'scorp', x: 1220, r: 36, s: 0.55 }, { t: 'scorp', x: 1760, r: 40, s: 0.6 }],
+    guide: { name: 'عمو شیرعلی', eth: 'بختیاری · کارگر قدیمی نفت', O: { body: 'robe', top: [236, 232, 220], stripe: [44, 42, 52], head: 'tallhat', hc: [40, 34, 30], beard: [44, 38, 34] },
+      lines: ['درود! من شیرعلی‌ام از ایل بختیاری. اینجا سرزمین کوه و کوچه.', 'سال ۱۲۸۷ همین‌جا اولین چاه نفت خاورمیانه فوران کرد؛ چاه شماره‌ی یک.', 'شعله‌ها از زمین بیرون می‌زنن؛ صبر کن خاموش بشن بعد رد شو. تو چاله‌ی نفت هم نیفتی!'],
+      win: 'دمت گرم! بختیاری‌ها به دل و جرئتت افتخار می‌کنن.' },
+    fact: 'چوقا، بالاپوش سفید با راه‌راه‌های تیره، لباس سنتی مردان بختیاری است؛ همین که عمو شیرعلی پوشیده.', souv: { e: '🧥', n: 'چوقای بختیاری' } },
+
+  { id: 'hoor', code: 'HOOR', num: '1-7', name: 'HOOR AL-AZIM WETLAND', fa: 'تالاب هورالعظیم', city: 'هویزه', len: 1900, time: 85, tod: [0.55, 0.78], key: 1.06,
+    water: true, ground: 'mud', pit: 'water', item: 'fish', itemFa: 'ماهی', hi: 'HALA!',
+    far: farHoor, mid: midHoor, props: propsHoor, fg: fgReeds,
+    gaps: [[360, 440], [620, 720], [900, 980], [1200, 1320], [1560, 1640]],
+    plats: [[400, 26, 6, 'boat', { amp: 22, spd: 0.02 }], [670, 26, 6, 'boat', { amp: 30, spd: 0.018 }], [940, 26, 6, 'boat', { amp: 22, spd: 0.024, ph: 2 }],
+      [1235, 26, 6, 'boat', { amp: 14, spd: 0.03 }], [1285, 26, 6, 'boat', { amp: 14, spd: 0.03, ph: 3.14 }], [1600, 26, 6, 'boat', { amp: 22, spd: 0.022, ph: 1 }]],
+    en: [{ t: 'mosq', x: 520, r: 30, h: 24, s: 0.5 }, { t: 'mosq', x: 820, r: 40, h: 28, s: 0.55 }, { t: 'buff', x: 1080, r: 40, s: 0.3 }, { t: 'mosq', x: 1450, r: 50, h: 22, s: 0.6 }, { t: 'buff', x: 1760, r: 40, s: 0.35 }],
+    guide: { name: 'حاج عبدالله', eth: 'عرب هویزه · مشحوف‌ران', O: { body: 'robe', top: [150, 122, 92], head: 'keff', hc: [240, 238, 230], hc2: [204, 40, 46], beard: [200, 198, 192] },
+      lines: ['هلا والله! به هورالعظیم خوش اومدی. من عبدالله‌ام.', 'مردم هور قرن‌ها با مشحوف، قایق باریک و بلند، لای نیزارها رفت‌وآمد کردن و گاومیش پرورش دادن.', 'سوار مشحوف‌ها شو تا از آب رد بشی. به گاومیش‌ها نخور، ولی می‌تونی روی کمرشون بپری!'],
+      win: 'مشحوف‌رانی رو خوب یاد گرفتی، والله!' },
+    fact: 'هورالعظیم تالابی مرزی میان ایران و عراق است و یکی از بزرگ‌ترین تالاب‌های منطقه به شمار می‌رود.', souv: { e: '🧺', n: 'حصیر نی هور' } },
+
+  { id: 'arvand', code: 'ARVAND', num: '1-8', name: 'KHORRAMSHAHR AND ABADAN', fa: 'خرمشهر و آبادان', city: 'خرمشهر · آبادان', len: 2000, time: 90, tod: [0.62, 1], key: 1.0,
+    water: true, ground: 'dirt', pit: 'water', city2: true, lamps: true, item: 'date', itemFa: 'خرما', hi: 'HALA!',
+    far: farArvand, mid: drawBoat, props: propsArvand, fg: fgPalms,
+    gaps: [[820, 856], [1450, 1490]],
+    plats: [[600, 24, 22, 'wood'], [1180, 24, 26, 'wood'], [1220, 24, 40, 'wood'], [1700, 14, 12, 'crate', 0, 1], [1714, 14, 24, 'crate', 0, 1]],
+    en: [{ t: 'bee', x: 400, r: 40, h: 20, s: 0.55 }, { t: 'bee', x: 700, r: 40, h: 26, s: 0.6 }, { t: 'bee', x: 1000, r: 50, h: 20, s: 0.6 }, { t: 'bee', x: 1320, r: 40, h: 24, s: 0.65 }, { t: 'scorp', x: 1600, r: 30, s: 0.6 }, { t: 'bee', x: 1850, r: 40, h: 22, s: 0.7 }],
+    guide: { name: 'لیلا', eth: 'عرب خرمشهری · نخلدار', O: { body: 'robe', top: [36, 30, 42], head: 'scarf', hc: [36, 30, 42], hc2: [210, 168, 64] },
+      lines: ['هلا! من لیلام از خرمشهر؛ همون‌جا که کارون به اروندرود می‌رسه.', 'اون گنبد، مسجد جامع خرمشهره؛ نماد ایستادگی شهر. دورتر هم چراغ‌های پالایشگاه آبادان رو می‌بینی.', 'این آخرین مرحله‌ست! از نخلستان رد شو، خرماها رو جمع کن و مواظب زنبورها باش.'],
+      win: 'تو حالا یه کاشف واقعی خوزستانی هستی!' },
+    fact: 'پالایشگاه آبادان زمانی بزرگ‌ترین پالایشگاه نفت جهان بود.', souv: { e: '🏅', n: 'نشان کاشف خوزستان' } }
+];
+
+// ================================================================ SAVE
+const LS = 'ahwaz-compiled-v2';
+const blankSave = () => ({ char: null, unl: 1, rank: {}, souv: {} });
+let SAVE = (() => { try { return Object.assign(blankSave(), JSON.parse(localStorage.getItem(LS) || '{}')); } catch (e) { return blankSave(); } })();
+const store = () => { try { localStorage.setItem(LS, JSON.stringify(SAVE)); } catch (e) { } };
+const CH = () => CHARS.find(c => c.id === SAVE.char) || CHARS[0];
+const fa = n => Number(n).toLocaleString('fa-IR');
+
+// ================================================================ GAME STATE
+const K = { left: false, right: false, jump: false, jumpPressed: false };
+let LVI = 0, LV, gaps = [], plats = [], enemies = [], items = [], P, cam = 0, f = 0, state = 'title', timeLeft = 0, tod = 0;
+let nItems = 0, nBirds = 0, nKills = 0, hurts = 0, parts = [], pops = [], prints = [], ev = {}, finish = 0, introAt = 0, lastStep = 0, shake = 0;
+let failWhy = '', pendingOv = null, lastRank = 'C', lastFirst = false, lastUsed = 0;
+
+const groundAt = x => !gaps.some(g => x > g[0] + 1 && x < g[1] - 1);
+const gapAt = x => gaps.find(g => x > g[0] - 6 && x < g[1] + 6);
+const puddleAt = x => LVI === 0 ? PUDDLES.findIndex(p => Math.abs(x - p.x) <= p.w / 2 - 2) : -1;
+const pan = sx => clamp((sx - W / 2) / (W / 2), -0.8, 0.8);
+
+function genItems() {
+  const out = [], step = 56; let n = 0;
+  for (let x = 150; x < LV.len - 60; x += step, n++) {
+    const gp = plats.find(p => p.g && Math.abs(x - p.x) <= p.w / 2 + 4);
+    if (gp) { if (!out.some(o => o.x === gp.x)) out.push({ x: gp.x, h: gp.h + 13 }); continue; }
+    const g = gapAt(x);
+    if (g) { if (g[1] - g[0] <= 48) out.push({ x: (g[0] + g[1]) / 2, h: 30 }); continue; }
+    out.push({ x, h: n % 5 === 3 ? 40 : 13 });
+  }
+  for (const p of plats) if (!p.g) out.push({ x: p.x, h: p.h + 13 });
+  return out.map(o => ({ x: o.x, h: o.h, got: false }));
+}
+function buildLevel(i) {
+  LVI = i; LV = LEVELS[i]; M.key = LV.key || 1;
+  gaps = LV.gaps || [];
+  plats = (LV.plats || []).map(p => ({ x: p[0], w: p[1], h: p[2], st: p[3], mv: p[4] || null, g: !!p[5], cx: p[0], px: p[0], dx: 0 }));
+  enemies = (LV.en || []).map(e => Object.assign({ dir: 1, dead: -1, ph: R() * 6.28, y: 0, h: 0, s: 0.4, r: 30, per: 160, off: 0, on: false, warn: false, cyc: 0 }, e, { x0: e.x }));
+  items = genItems();
+  const ch = CH();
+  P = { x: 70, y: 0, vx: 0, vy: 0, ground: true, face: 1, inP: -1, wet: 0, on: null, jumps: 0, inv: 0, safe: 70, hearts: ch.id === 'arab' ? 4 : 3, max: ch.id === 'arab' ? 4 : 3 };
+  cam = 0; timeLeft = LV.time + (ch.id === 'dez' ? 20 : 0); tod = LV.tod[0];
+  nItems = 0; nBirds = 0; nKills = 0; hurts = 0; parts = []; pops = []; prints = []; shake = 0;
+  ev = { bridge: -1, lamps: -1, train: -1, stall: false }; lastStep = Math.floor(P.x / 7); pendingOv = null;
+  FLOCKS.forEach(fl => { fl.fs = -1; fl.cooed = 0; }); PUDDLES.forEach(p => p.sf = -999);
+}
+
+function splashAt(i, big) {
+  const p = PUDDLES[i]; p.sf = f;
+  for (let k = 0; k < (big ? 14 : 8); k++) { const a = -Math.PI * (0.1 + 0.8 * k / (big ? 13 : 7)); parts.push({ x: P.x, y: FY, vx: Math.cos(a) * (big ? 0.9 : 0.6), vy: Math.sin(a) * (big ? 1.6 : 1.1), life: 40 }); }
+  SFX.splash(big);
+}
+function dust(n, col) { for (let k = 0; k < n; k++) parts.push({ x: P.x + (R() - 0.5) * 6, y: FY - P.y, vx: (R() - 0.5) * 0.8, vy: -R() * 0.8, life: 22, c: col }); }
+
+function updEnemy(e) {
+  if (e.dead >= 0) return;
+  if (e.t === 'scorp' || e.t === 'bee' || e.t === 'mosq' || e.t === 'buff') {
+    e.x += e.dir * e.s;
+    if (e.x > e.x0 + e.r) { e.x = e.x0 + e.r; e.dir = -1; } if (e.x < e.x0 - e.r) { e.x = e.x0 - e.r; e.dir = 1; }
+    e.y = (e.t === 'bee' || e.t === 'mosq') ? e.h + Math.sin(f * 0.06 + e.ph) * 6 : e.h;
+  } else {
+    e.cyc = (f + e.off) % e.per; e.on = e.cyc < e.per * 0.38; e.warn = !e.on && e.cyc > e.per * 0.72;
+    if (e.cyc === 0 && state === 'play') { const sx = e.x - cam; if (sx > -20 && sx < W + 20) (e.t === 'fire' ? SFX.fire : SFX.gush)(pan(sx)); }
+  }
+}
+function hurt() {
+  if (P.inv > 0 || state !== 'play') return;
+  P.hearts--; hurts++; P.inv = 110; shake = 12; SFX.hurt();
+  P.vy = -1.9; P.ground = false; P.on = null; P.vx = -P.face * 1.3;
+  if (P.hearts <= 0) fail('hit');
+}
+function pitFall() {
+  P.hearts--; hurts++; shake = 10; SFX.fall();
+  if (P.hearts <= 0) { fail('fall'); return; }
+  P.x = P.safe; P.y = 0; P.vx = 0; P.vy = 0; P.ground = true; P.on = null; P.inv = 110;
+}
+function fail(why) { state = 'fail'; failWhy = why; finish = f; stopMusic(); SFX.timeup(); pendingOv = { name: 'fail', at: f + 80 }; }
+function rankNow() { const pct = nItems / Math.max(1, items.length); if (pct >= 0.9 && hurts === 0) return 'S'; if (pct >= 0.7 && hurts <= 1) return 'A'; if (pct >= 0.4) return 'B'; return 'C'; }
+function clearLevel() {
+  state = 'clear'; finish = f; stopMusic(); SFX.clear();
+  lastRank = rankNow(); lastUsed = Math.round(LV.time + (CH().id === 'dez' ? 20 : 0) - timeLeft);
+  const old = SAVE.rank[LV.id]; if (!old || 'SABC'.indexOf(lastRank) < 'SABC'.indexOf(old)) SAVE.rank[LV.id] = lastRank;
+  lastFirst = !SAVE.souv[LV.id]; SAVE.souv[LV.id] = 1; SAVE.unl = Math.max(SAVE.unl, Math.min(LEVELS.length, LVI + 2)); store();
+  pendingOv = { name: 'result', at: f + 140 };
+}
+function hitEnemies(prevY) {
+  const pl = P.x - 4, pr = P.x + 4, pb = P.y, pt = P.y + 22;
+  for (const e of enemies) {
+    if (e.dead >= 0) continue;
+    let bw, by0, by1, stomp = false, bounce = false;
+    if (e.t === 'scorp') { bw = 5; by0 = e.y; by1 = e.y + 7; stomp = true; }
+    else if (e.t === 'bee' || e.t === 'mosq') { bw = 4; by0 = e.y - 4; by1 = e.y + 4; stomp = true; }
+    else if (e.t === 'buff') { bw = 11; by0 = 0; by1 = 14; bounce = true; }
+    else if (e.t === 'fire') { if (!e.on || fireAmt(e) < 0.3) continue; bw = 4; by0 = 0; by1 = 6 + 34 * fireAmt(e); }
+    else { if (!e.on) continue; bw = 5; by0 = 0; by1 = 70; }
+    if (pr < e.x - bw || pl > e.x + bw || pt < by0 || pb > by1) continue;
+    if ((stomp || bounce) && P.vy > 0 && prevY >= by1 - 4) {
+      if (stomp) { e.dead = f; nKills++; pops.push({ x: e.x, y: FY - by1, t: f, txt: '+1' }); SFX.stomp(); } else SFX.boing();
+      P.vy = bounce ? -3.2 : -2.3; P.ground = false; P.on = null; P.jumps = 1; continue;
+    }
+    hurt(); return;
+  }
+}
+function landOn(p) {
+  P.ground = true; P.vy = 0; P.on = p; P.jumps = 0;
+  if (!p) { const lp = puddleAt(P.x); if (lp >= 0) { P.inP = lp; splashAt(lp, true); } else { SFX.land(pan(P.x - cam)); dust(4, lit(GROUNDS[LV.ground] ? GROUNDS[LV.ground].b : [210, 190, 150])); } }
+  else SFX.land(pan(P.x - cam));
+}
+function updPlayer() {
+  const ch = CH().id;
+  timeLeft -= 1 / 60;
+  if (timeLeft <= 0) { timeLeft = 0; fail('time'); return; }
+  if (P.inv > 0) P.inv--;
+  const dir = (K.right ? 1 : 0) - (K.left ? 1 : 0);
+  const inP = puddleAt(P.x);
+  const maxv = ((inP >= 0 && P.ground && !P.on) ? 0.55 : 1.05) * (ch === 'lor' ? 1.28 : 1);
+  P.vx += (dir * maxv - P.vx) * (P.ground ? 0.18 : 0.07);
+  if (dir) P.face = dir;
+  const JUMP = ch === 'bakh' ? 3.2 : 2.75;
+  if (K.jumpPressed) {
+    if (P.ground) { P.vy = -JUMP; P.ground = false; P.on = null; P.inP = -1; P.jumps = 1; SFX.jump(); }
+    else if (ch === 'shu' && P.jumps < 2) { P.vy = -JUMP * 0.92; P.jumps = 2; SFX.jump2(); dust(6, [240, 240, 235]); }
+  }
+  K.jumpPressed = false;
+  if (P.ground && P.on) P.x += P.on.dx;
+  let nx = clamp(P.x + P.vx, 20, LV.len + 40);
+  for (const p of plats) if (p.g) { const l = p.cx - p.w / 2 - 3, r = p.cx + p.w / 2 + 3; if (P.y < p.h - 1 && nx > l && nx < r) { nx = P.x <= p.cx ? l : r; P.vx = 0; } }
+  P.x = nx;
+  const prevY = P.y;
+  if (!P.ground) {
+    P.vy += 0.13; if (!K.jump && P.vy < -0.6) P.vy += 0.16; P.vy = Math.min(P.vy, 4.2);
+    P.y -= P.vy;
+    if (P.vy > 0) {
+      let land = null, lh = -1e9;
+      for (const p of plats) if (Math.abs(P.x - p.cx) <= p.w / 2 + 2 && prevY >= p.h - 0.01 && P.y <= p.h && p.h > lh) { land = p; lh = p.h; }
+      if (land) { P.y = land.h; landOn(land); }
+      else if (prevY >= 0 && P.y <= 0 && groundAt(P.x)) { P.y = 0; landOn(null); }
+    }
+  } else {
+    if (P.on) { if (Math.abs(P.x - P.on.cx) > P.on.w / 2 + 2) { P.ground = false; P.on = null; P.vy = 0.2; } else P.y = P.on.h; }
+    else if (!groundAt(P.x)) { P.ground = false; P.vy = 0.2; }
+  }
+  if (P.ground && !P.on && groundAt(P.x - 12) && groundAt(P.x + 12)) P.safe = P.x;
+  if (P.y < -34) { pitFall(); if (state !== 'play') return; }
+
+  // puddles & footsteps (Ahwaz)
+  if (P.ground && !P.on) {
+    const np = puddleAt(P.x);
+    if (np >= 0 && np !== P.inP && Math.abs(P.vx) > 0.1) splashAt(np, false);
+    if (np < 0 && P.inP >= 0) P.wet = 70;
+    P.inP = np;
+  }
+  const si = Math.floor(P.x / 7);
+  if (si !== lastStep && P.ground && Math.abs(P.vx) > 0.2) {
+    const kind = P.inP >= 0 ? 'splash' : (P.wet > 0 ? 'wet' : 'dry');
+    SFX.step(kind);
+    if (kind === 'wet' && LVI === 0) prints.push({ x: P.x + 2, side: si % 2 ? 1 : -1, t: f });
+  }
+  lastStep = si; P.wet -= Math.abs(P.vx);
+
+  // collectibles
+  const mag = ch === 'man';
+  const top = FY - P.y - 26, bot = FY - P.y + 2;
+  for (const d of items) {
+    if (d.got) continue;
+    if (mag && Math.abs(P.x - d.x) < 30 && Math.abs((P.y + 10) - d.h) < 34) { d.x += (P.x - d.x) * 0.14; d.h += ((P.y + 10) - d.h) * 0.14; }
+    const dy = FY - d.h;
+    if (Math.abs(P.x - d.x) < 6 && dy >= top && dy <= bot) { d.got = true; nItems++; pops.push({ x: d.x, y: dy, t: f }); SFX.date(); }
+  }
+  hitEnemies(prevY);
+  if (state !== 'play') return;
+
+  if (LVI === 0) {
+    for (const fl of FLOCKS) {
+      const sx = fl.wx - cam;
+      if (fl.fs < 0) {
+        if (Math.abs(P.x - fl.wx) < 30) { fl.fs = f; nBirds += fl.birds.length; SFX.flock(pan(sx), fl.birds.length); }
+        else if (sx < W && sx > 0 && fl.cooed < 2 && (f % 70 === (fl.wx % 70))) { fl.cooed++; SFX.coo(pan(sx)); }
+      }
+    }
+    if (!ev.stall && P.x > STALL - 6) { ev.stall = true; SFX.clink(pan(STALL - cam)); }
+    if (ev.bridge < 0 && tod > 0.42) { ev.bridge = f; SFX.shimmer(pan(WB.x + WB.l / 2 - cam * 0.55)); }
+    if (ev.train < 0 && tod > 0.55) { ev.train = f; SFX.trainStart(); }
+  }
+  if (LV.lamps && ev.lamps < 0 && tod > 0.48) { ev.lamps = f; SFX.lamp(); }
+  ambientEvents();
+  if (P.x >= LV.len - 10) clearLevel();
+}
+
+function update() {
+  f++;
+  for (const p of plats) { p.px = p.cx; if (p.mv) p.cx = p.x + Math.sin(f * p.mv.spd + (p.mv.ph || 0)) * p.mv.amp; p.dx = p.cx - p.px; }
+  for (const e of enemies) updEnemy(e);
+  if (state === 'intro') { K.jumpPressed = false; if (f - introAt > 96) state = 'play'; }
+  else if (state === 'play') updPlayer();
+  else K.jumpPressed = false;
+  if (state === 'title' || state === 'menu') {
+    const span = Math.max(1, LV.len - W + 60), t = (f * 0.25) % (span * 2);
+    cam = t < span ? t : span * 2 - t;
+    tod = LV.tod[0] + (LV.tod[1] - LV.tod[0]) * (LVI === 0 ? 0.3 : 0.5);
+  } else {
+    const target = clamp(P.x - PSX, 0, LV.len + 100 - W);
+    cam += (target - cam) * 0.12;
+    const pr = clamp((P.x - 70) / (LV.len - 120), 0, 1);
+    tod += (LV.tod[0] + (LV.tod[1] - LV.tod[0]) * pr - tod) * 0.03;
+  }
+  for (const p of parts) { p.x += p.vx; p.y += p.vy; p.vy += 0.11; p.life--; }
+  parts = parts.filter(p => p.life > 0 && p.y < FY + 4);
+  pops = pops.filter(p => f - p.t < 40);
+  prints = prints.filter(p => f - p.t < 300);
+  if (shake > 0) shake--;
+  if (pendingOv && f >= pendingOv.at) { const n = pendingOv.name; pendingOv = null; n === 'result' ? openResult() : openFail(); }
+  audioTick();
+}
+
+// ================================================================ RENDER
+function heart(x, y, c) { const s = ['.#.#.', '#####', '#####', '.###.', '..#..']; F(c); s.forEach((r, j) => { for (let i = 0; i < 5; i++) if (r[i] === '#') ctx.fillRect(x + i, y + j, 1, 1); }); }
+function drawPlayer(c) {
+  if (P.inv > 0 && ((f >> 2) & 1) && state === 'play') return;
+  const x = Math.round(P.x - c); let y = FY - Math.round(P.y);
+  const walking = Math.abs(P.vx) > 0.15 && P.ground && state === 'play';
+  const s = ((P.x % 14) + 14) % 14 / 14, o = walking ? Math.round(Math.sin(2 * Math.PI * s) * 2) : 0;
+  if (walking && Math.abs(Math.cos(2 * Math.PI * s)) > 0.8) y -= 1;
+  if (P.y > -2) {
+    const baseH = P.on ? P.on.h : 0, sh = Math.max(2, 5 - (P.y - baseH) / 8);
+    if (P.on || groundAt(P.x)) ell(x - sh, FY - baseH - 1, x + sh, FY - baseH + 1, lit([140, 118, 88]));
+  }
+  drawPerson(x, y, CH().O, P.face, o, !P.ground);
+}
+function drawGuide(c) {
+  const wx = LV.len + 16, sx = Math.round(wx - c); if (sx < -20 || sx > W + 20) return;
+  const bob = ((f / 40) | 0) % 2;
+  ell(sx - 4, FY - 5, sx + 4, FY - 3, lit([140, 118, 88]));
+  drawPerson(sx, FY - 4 - bob * 0, LV.guide.O, -1, 0, false);
+  if ((state === 'play' || state === 'clear') && Math.abs(P.x - wx) < 90) {
+    const t = LV.hi, w = tw(t) + 6, bx = sx - (w >> 1), by = FY - 40;
+    rect(bx, by, bx + w, by + 9, [250, 248, 240]); px(sx, by + 10, [250, 248, 240]); px(sx - 1, by + 10, [250, 248, 240]);
+    text(t, bx + 3, by + 2, [40, 30, 50], 1, null);
+  }
+}
+function render() {
+  setPalette(tod);
+  const c = Math.round(cam);
+  ctx.save();
+  if (shake > 0) ctx.translate((f % 2 ? 1 : -1) * Math.ceil(shake / 5), 0);
+  drawSky(); drawSun(); drawClouds(c);
+  LV.far(c); flushGlow();
+  if (LV.water) drawWater(); else drawPlain(c);
+  if (LV.mid) LV.mid(c);
+  drawGroundStyle(c); drawPits(c);
+  LV.props(c);
+  for (const p of plats) drawPlat(p, c);
+  if (LV.len - 10 - c < W + 30) drawFlag(Math.round(LV.len - 10 - c));
+  drawGuide(c);
+  for (const d of items) { const sx = d.x - c; if (!d.got && sx > -6 && sx < W + 6) drawItem(LV.item, sx, FY - d.h); }
+  for (const p of pops) text(p.txt || '+1', p.x - c - 3, p.y - 8 - (f - p.t) / 2, [255, 220, 120]);
+  if (LVI === 0) for (const fl of FLOCKS) drawFlock(fl, c);
+  for (const e of enemies) {
+    if (e.t === 'fire' || e.t === 'gush') continue;
+    const sx = Math.round(e.x - c); if (sx < -30 || sx > W + 30) continue;
+    const y = FY - Math.round(e.y);
+    if (e.dead >= 0) { const d = f - e.dead; if (d < 30) { if (e.t === 'scorp') rect(sx - 4, y - 1, sx + 4, y, lit([90, 54, 24])); else px(sx, y - d, lit([250, 240, 200])); } continue; }
+    if (e.t === 'scorp') drawScorp(sx, y, e.dir); else if (e.t === 'buff') drawBuff(sx, y, e.dir); else drawBee(sx, y, e.t === 'mosq');
+  }
+  if (state !== 'title' && state !== 'menu') drawPlayer(c);
+  for (const p of parts) px(p.x - c, p.y, p.c || mix(mix(S.top, S.hor, 0.4), [255, 255, 255], 0.5));
+  for (const e of enemies) { if (e.t === 'fire') drawFire(e, c); else if (e.t === 'gush') drawGush(e, c); }
+  if (LV.fg) LV.fg(c);
+  flushGlow();
+  ctx.restore();
+  vignette();
+  if (state === 'play' || state === 'intro' || state === 'clear' || state === 'fail') drawHUD();
+  drawCards();
+}
+function drawHUD() {
+  const white = [250, 248, 240], gold = [255, 208, 110];
+  text(LV.code + ' ' + LV.num, 6, 5, white);
+  drawItem(LV.item, 104, 7, true);
+  text('x' + pad2(nItems), 110, 5, gold);
+  for (let i = 0; i < P.max; i++) heart(150 + i * 7, 5, i < P.hearts ? [236, 70, 70] : [80, 70, 90]);
+  const tl = Math.ceil(timeLeft), hurry = tl <= 10 && state === 'play';
+  text('TIME ' + pad2(tl), 268, 5, hurry && ((f / 15) | 0) % 2 ? [255, 110, 90] : white);
+  const prog = clamp((P.x - 70) / (LV.len - 80), 0, 1);
+  rect(6, 13, 62, 13, [80, 70, 90]); rect(6, 13, 6 + 56 * prog, 13, gold);
+  if (A.muted) text('MUTE', 6, 170, white);
+}
+function drawCards() {
+  if (state === 'title') {
+    shade(0.66);
+    ctext('AHWAZ', 36, [255, 210, 120], 6, [90, 30, 20]);
+    ctext('8 STAGES ACROSS KHUZESTAN', 80, [240, 236, 226]);
+    if (((f / 24) | 0) % 2 === 0) ctext('PRESS START', 100, [255, 255, 255], 2);
+    ctext('KARUN - SHUSH - CHOGHA ZANBIL - DEZFUL', 134, [190, 184, 200]);
+    ctext('SHUSHTAR - MIS - HOOR - ARVAND', 144, [190, 184, 200]);
+  } else if (state === 'intro') {
+    const d = f - introAt; shade(0.55 * (1 - sm((d - 70) / 26)));
+    if (d < 92) { ctext('WORLD ' + LV.num, 52, [240, 236, 226]); ctext(LV.name, 64, [255, 210, 120], 2); }
+    if (d > 20 && d < 70 && ((d / 8) | 0) % 2 === 0) ctext('READY', 98, [255, 255, 255], 2);
+    if (d >= 70 && d < 96) ctext('GO!', 96, [255, 255, 255], 3);
+  } else if (state === 'clear') {
+    const d = f - finish; shade(0.72 * sm(d / 36));
+    if (d > 10) ctext('STAGE CLEAR!', 34, [255, 210, 120], 2);
+    if (d > 28) ctext(LV.name, 56, [255, 255, 255]);
+    if (d > 50) ctext('ITEMS ' + nItems + '/' + items.length + '   HITS ' + hurts + '   TIME ' + lastUsed + 'S', 84, [240, 236, 226]);
+    if (d > 66) ctext('RANK ' + lastRank, 100, lastRank === 'S' ? [255, 210, 120] : [150, 225, 255], 2);
+  } else if (state === 'fail') {
+    const d = f - finish; shade(0.72 * sm(d / 36));
+    if (d > 10) ctext(failWhy === 'time' ? 'TIME UP!' : failWhy === 'fall' ? 'SPLASH!' : 'OUCH!', 50, [255, 120, 100], 3);
+    if (d > 30) ctext('THE KARUN WILL WAIT.', 82, [240, 236, 226]);
+  }
+}
+
+// ================================================================ OVERLAY SCREENS
+const OV = document.getElementById('ov');
+const q = s => OV.querySelector(s);
+let pick = null;
+function ovShow(html) {
+  OV.innerHTML = html; OV.classList.add('on'); OV.scrollTop = 0;
+  const b = q('[data-focus]') || q('button:not([disabled])'); if (b) setTimeout(() => b.focus({ preventScroll: true }), 40);
+}
+function ovHide() { OV.classList.remove('on'); OV.innerHTML = ''; cv.focus(); }
+function renderTo(cnv, fn) { const old = ctx, oldS = Object.assign({}, S); ctx = cnv.getContext('2d'); ctx.imageSmoothingEnabled = false; setPalette(0.1); try { fn(); } finally { ctx = old; Object.assign(S, oldS); } }
+function portrait(cnv, O, face) { if (!cnv) return; renderTo(cnv, () => { ctx.clearRect(0, 0, cnv.width, cnv.height); drawPerson(11, 28, O, face || 1, 0, false); }); }
+const pcv = id => `<canvas class="pix" width="24" height="30"${id ? ` id="${id}"` : ''}></canvas>`;
+
+function openSelect() {
+  state = 'menu'; stopMusic(); pick = pick || SAVE.char || 'arab';
+  ovShow(`<div><p class="kick">CHOOSE YOUR TRAVELER</p><h2>همسفرت رو انتخاب کن</h2></div>
+  <div class="chars" role="radiogroup" aria-label="شخصیت‌ها">${CHARS.map(c => `<button class="ch" role="radio" data-id="${c.id}">${pcv()}<b>${c.name}</b><small>${c.eth}</small></button>`).join('')}</div>
+  <p class="perk" id="perk"></p>
+  <div class="row"><button class="b" id="goChar" data-focus>بزن بریم</button>${SAVE.char ? '<button class="b alt" id="bkMap">برگشت به نقشه</button>' : ''}</div>`);
+  OV.querySelectorAll('.ch').forEach((b, i) => portrait(b.querySelector('canvas'), CHARS[i].O));
+  const upd = () => {
+    const c = CHARS.find(x => x.id === pick);
+    q('#perk').innerHTML = `<b>${c.name}، ${c.eth}.</b> ${c.bio}<span class="tag">${c.perk}</span>`;
+    OV.querySelectorAll('.ch').forEach(b => { const s = b.dataset.id === pick; b.classList.toggle('sel', s); b.setAttribute('aria-checked', s); });
+  };
+  upd();
+  q('.chars').onclick = e => { const b = e.target.closest('.ch'); if (!b) return; pick = b.dataset.id; SFX.click(); upd(); };
+  q('#goChar').onclick = () => { SAVE.char = pick; store(); SFX.click(); openMap(); };
+  const bk = q('#bkMap'); if (bk) bk.onclick = openMap;
+}
+function openMap() {
+  state = 'menu'; stopMusic();
+  const cur = Math.min(SAVE.unl, LEVELS.length) - 1; buildLevel(cur);
+  const c = CH(), nS = LEVELS.filter(L => SAVE.souv[L.id]).length;
+  ovShow(`<div class="who">${pcv('whoC')}<div><b>${c.name} · ${c.eth}</b><small>${c.perk}</small></div><button class="lnk" id="chg">تغییر همسفر</button></div>
+  <div><p class="kick">KHUZESTAN · ${nS}/8 SOUVENIRS</p><h2>نقشه‌ی سفر</h2></div>
+  <ol class="stops">${LEVELS.map((L, i) => { const lock = i >= SAVE.unl, r = SAVE.rank[L.id]; return `<li><button class="stop${lock ? ' lock' : ''}${i === cur ? ' cur' : ''}" data-i="${i}" ${lock ? 'disabled' : ''} ${i === cur ? 'data-focus' : ''}><span class="n">${L.num}</span><b>${L.fa}</b><small>${L.city}${lock ? ' · قفل' : ''}</small><span class="rk">${r || ''}</span></button></li>`; }).join('')}</ol>
+  <div class="shelf"><span class="lbl">سوغاتی‌ها</span>${LEVELS.map(L => SAVE.souv[L.id] ? `<span title="${L.souv.n}" aria-label="${L.souv.n}">${L.souv.e}</span>` : '<span class="empty" aria-hidden="true"></span>').join('')}</div>`);
+  portrait(q('#whoC'), c.O);
+  const stops = q('.stops');
+  stops.onclick = e => { const b = e.target.closest('.stop'); if (!b || b.disabled) return; SFX.click(); openIntro(+b.dataset.i); };
+  const peek = e => { const b = e.target.closest('.stop'); if (!b || b.disabled) return; const i = +b.dataset.i; if (i !== LVI) buildLevel(i); };
+  stops.addEventListener('mouseover', peek); stops.addEventListener('focusin', peek);
+  q('#chg').onclick = openSelect;
+}
+function openIntro(i) {
+  buildLevel(i); state = 'menu';
+  const L = LV, g = L.guide; let k = 0;
+  ovShow(`<div class="dlg"><div class="por">${pcv('gC')}<div><b>${g.name}</b><br><small>${g.eth}</small></div></div>
+  <div class="talk"><p class="kick">WORLD ${L.num} · ${L.name}</p><h2>${L.fa}</h2><div class="lines" id="lines" aria-live="polite"></div>
+  <div class="row"><button class="b" id="nx" data-focus>بعدی</button><button class="lnk" id="sk">رد شدن از گفت‌وگو</button><button class="lnk" id="bk">نقشه</button></div></div></div>
+  <p class="fact"><span>می‌دونستی؟</span> ${L.fact}</p>`);
+  portrait(q('#gC'), g.O, -1);
+  const lines = q('#lines'), nx = q('#nx');
+  const ready = () => { nx.textContent = 'شروع مرحله'; nx.onclick = beginPlay; q('#sk').hidden = true; nx.focus(); };
+  const step = () => { lines.insertAdjacentHTML('beforeend', `<p>${g.lines[k]}</p>`); k++; SFX.click(); if (k >= g.lines.length) ready(); };
+  nx.onclick = step; q('#sk').onclick = () => { while (k < g.lines.length) step(); }; q('#bk').onclick = openMap;
+  step();
+}
+function beginPlay() {
+  ovHide(); initAudio(); buildLevel(LVI);
+  state = 'intro'; introAt = f; K.left = K.right = K.jump = false; SFX.start(); startMusic();
+}
+function openResult() {
+  state = 'menu';
+  const L = LV, last = LVI === LEVELS.length - 1, r = lastRank, head = { S: 'بی‌نقص!', A: 'عالی بود!', B: 'خوب بود!', C: 'رد شدی!' }[r];
+  ovShow(`<div class="res"><p class="kick">STAGE CLEAR · RANK <em>${r}</em></p><h2>${head} ${L.fa}</h2>
+  <p class="stats">${L.itemFa}: ${fa(nItems)} از ${fa(items.length)} · ضربه: ${fa(hurts)} · زمان: ${fa(lastUsed)} ثانیه${LVI === 0 ? ` · کبوتر: ${fa(nBirds)}` : ''}${nKills ? ` · مزاحم فراری: ${fa(nKills)}` : ''}</p>
+  ${lastFirst ? `<div class="souv"><span>${L.souv.e}</span><div><small>سوغاتی جدید تو کوله</small><b>${L.souv.n}</b></div></div>` : ''}
+  <div class="say">${pcv('gC')}<p>«${L.guide.win}» <small>(${L.guide.name})</small></p></div>
+  <div class="row">${last ? '<button class="b" id="end" data-focus>پایان سفر</button>' : `<button class="b" id="nx" data-focus>مرحله‌ی بعد: ${LEVELS[LVI + 1].fa}</button>`}
+  <button class="b alt" id="rt">${r === 'S' ? 'دوباره' : 'دوباره برای رتبه‌ی S'}</button><button class="b alt" id="mp">نقشه</button></div>
+  ${r !== 'S' ? '<p class="fact"><span>رتبه‌ی S:</span> حداقل ۹۰٪ آیتم‌ها و بدون هیچ ضربه‌ای.</p>' : ''}</div>`);
+  portrait(q('#gC'), L.guide.O, -1);
+  if (lastFirst) SFX.souv();
+  const nx = q('#nx'); if (nx) nx.onclick = () => openIntro(LVI + 1);
+  const en = q('#end'); if (en) en.onclick = openEnding;
+  q('#rt').onclick = beginPlay; q('#mp').onclick = openMap;
+}
+function openFail() {
+  state = 'menu';
+  const t = { time: ['وقت تموم شد', 'خورشید زودتر از تو به مقصد رسید. این دفعه کمتر مکث کن.'], hit: ['جون‌هات تموم شد', 'از بالا روی عقرب‌ها و زنبورها بپر، نه از روبه‌رو بهشون بخور.'], fall: ['افتادی!', 'لب چاله‌ها بپر و دکمه‌ی پرش رو نگه دار تا بلندتر بپری.'] }[failWhy] || ['باختی', ''];
+  ovShow(`<div class="res"><p class="kick">WORLD ${LV.num} · TRY AGAIN</p><h2>${t[0]}</h2><p class="stats">${t[1]}</p>
+  <div class="say">${pcv('gC')}<p>«نگران نباش، یه بار دیگه امتحان کن. من همین‌جا منتظرتم.» <small>(${LV.guide.name})</small></p></div>
+  <div class="row"><button class="b" id="rt" data-focus>دوباره</button><button class="b alt" id="mp">نقشه</button></div></div>`);
+  portrait(q('#gC'), LV.guide.O, -1);
+  q('#rt').onclick = beginPlay; q('#mp').onclick = openMap;
+}
+function openEnding() {
+  state = 'menu';
+  const ranks = LEVELS.map(L => SAVE.rank[L.id] || '-'), allS = ranks.every(r => r === 'S');
+  ovShow(`<div class="res"><p class="kick">THE END · ${ranks.join(' ')}</p><h2>سفرت تموم شد، ${CH().name}!</h2>
+  <p class="stats">از کنار کارون تا نخلستان‌های اروند، با مردم هر گوشه‌ی خوزستان آشنا شدی. ${allS ? 'همه‌ی مرحله‌ها رو با رتبه‌ی S تموم کردی؛ افسانه‌ای!' : 'برای رتبه‌ی S می‌تونی به هر مرحله برگردی.'}</p>
+  <div class="shelf"><span class="lbl">کوله‌ی سوغاتی</span>${LEVELS.map(L => SAVE.souv[L.id] ? `<span title="${L.souv.n}">${L.souv.e}</span>` : '').join('')}</div>
+  <div class="cast">${LEVELS.map((L, i) => `<div>${pcv('cast' + i)}<span>${L.guide.name}<br>${L.guide.eth.split(' · ')[0]}</span></div>`).join('')}</div>
+  <div class="row"><button class="b" id="mp" data-focus>برگشت به نقشه</button></div></div>`);
+  LEVELS.forEach((L, i) => portrait(q('#cast' + i), L.guide.O, 1));
+  q('#mp').onclick = openMap;
+}
+
+// ================================================================ AUDIO ADDITIONS
+Object.assign(SFX, {
+  hurt() { if (!A.ctx) return; const t = now(); tone({ type: 'square', f0: 420, f1: 110, t, d: 0.28, v: 0.12 }); hiss({ t, freq: 800, d: 0.15, v: 0.25 }); },
+  fall() { if (!A.ctx) return; const t = now(); tone({ type: 'triangle', f0: 600, f1: 80, t, d: 0.6, v: 0.12 }); SFX.splash(true); },
+  stomp() { if (!A.ctx) return; const t = now(); tone({ type: 'square', f0: 180, f1: 60, t, d: 0.1, v: 0.16 }); tone({ f0: 880, t: t + 0.05, d: 0.08, v: 0.06 }); },
+  boing() { tone({ type: 'triangle', f0: 120, f1: 360, d: 0.25, v: 0.2 }); },
+  jump2() { tone({ f0: 440, f1: 1100, d: 0.14, v: 0.08 }); },
+  fire(p) { hiss({ type: 'bandpass', freq: 500, q: 0.5, a: 0.05, d: 0.5, v: 0.18, pan: p }); },
+  gush(p) { hiss({ type: 'bandpass', freq: 1200, q: 0.4, a: 0.05, d: 0.6, v: 0.14, pan: p }); },
+  souv() { if (!A.ctx) return; const t = now(); [659, 784, 988, 1319].forEach((fq, i) => tone({ type: 'triangle', f0: fq, t: t + i * 0.09, d: 0.2, v: 0.08 })); },
+  click() { tone({ f0: 900, d: 0.04, v: 0.05 }); }
+});
+
+// ================================================================ INPUT
+function start() { initAudio(); SFX.start(); if (SAVE.char) openMap(); else openSelect(); }
+function toggleMute() { A.muted = !A.muted; if (A.master) A.master.gain.setTargetAtTime(A.muted ? 0 : 0.8, now(), 0.02); }
+const KEYMAP = { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', Space: 'jump', ArrowUp: 'jump', KeyW: 'jump', KeyZ: 'jump' };
+addEventListener('keydown', e => {
+  if (OV.classList.contains('on')) { if (e.code === 'Escape' && q('#bk,#bkMap,#mp')) q('#bk,#bkMap,#mp').click(); return; }
+  const k = KEYMAP[e.code];
+  if (k || e.code === 'Enter') e.preventDefault();
+  if (state === 'title' && (e.code === 'Enter' || e.code === 'Space')) { start(); return; }
+  if (e.code === 'KeyM') { toggleMute(); return; }
+  if (e.code === 'KeyR' && (state === 'play' || state === 'intro')) { beginPlay(); return; }
+  if (e.code === 'Escape' && (state === 'play' || state === 'intro')) { stopMusic(); openMap(); return; }
+  if (!k) return;
+  if (k === 'jump' && !K.jump && !e.repeat) K.jumpPressed = true;
+  K[k] = true;
+});
+addEventListener('keyup', e => { const k = KEYMAP[e.code]; if (k) K[k] = false; });
+addEventListener('blur', () => { K.left = K.right = K.jump = false; });
+cv.addEventListener('pointerdown', () => { cv.focus(); if (state === 'title') start(); });
+document.querySelectorAll('.touch button').forEach(b => {
+  const k = b.dataset.k;
+  const down = e => { e.preventDefault(); b.classList.add('on'); if (state === 'title') { start(); return; } if (state !== 'play' && state !== 'intro') return; if (k === 'jump' && !K.jump) K.jumpPressed = true; K[k] = true; };
+  const up = e => { e.preventDefault(); b.classList.remove('on'); K[k] = false; };
+  b.addEventListener('pointerdown', down); b.addEventListener('pointerup', up); b.addEventListener('pointercancel', up); b.addEventListener('pointerleave', up);
+});
+
+// ================================================================ LOOP (fixed 60 Hz)
+buildLevel(0);
+let acc = 0, lastT = performance.now();
+function frame(t) {
+  acc += Math.min(100, t - lastT); lastT = t;
+  while (acc >= 1000 / 60) { update(); acc -= 1000 / 60; }
+  render();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+cv.focus();
+})();
+</script>
+</body>
+</html>

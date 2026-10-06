@@ -1,0 +1,22 @@
+{
+  "name": "ahwaz-compiled",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ahwaz, Compiled - Android build",
+  "scripts": {
+    "icons": "capacitor-assets generate --android",
+    "android:add": "cap add android && node scripts/patch-android.js",
+    "sync": "cap sync android",
+    "apk": "cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.1.2",
+    "@fontsource/silkscreen": "^5.0.0",
+    "@fontsource/vazirmatn": "^5.0.0"
+  }
+}
